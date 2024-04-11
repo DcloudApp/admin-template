@@ -6,9 +6,8 @@ import { i18n } from '@/locales/index'
 import App from '@/App.jsx'
 import router from '@/router'
 
-import '@arco-design/web-vue/dist/arco.css'
-
 import '@unocss/reset/tailwind.css'
+import '@arco-design/web-vue/dist/arco.css'
 import './styles/main.css'
 import 'virtual:uno.css'
 import './permission.js'
