@@ -49,7 +49,8 @@
     "brotli",
     "nuxt",
     "antfu",
-    "taze"
+    "taze",
+    "doption"
   ],
   "i18n-ally.localesPaths": [
     "src/locales/modules"

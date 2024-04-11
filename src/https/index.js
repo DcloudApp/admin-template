@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { clearToken, getToken } from '@/utils/auth'
+import router from '@/router'
 
 const request = axios.create({
   baseURL: import.meta.env.VITE_HTTP,
@@ -23,6 +25,8 @@ function removeCacheRequest(reqKey) {
 }
 request.interceptors.request.use(
   async (config) => {
+    // If token is found
+    config.headers.Authorization = `Bearer ${getToken()}`;
     // 移除参数中为 null、空字符串、空数组或空对象的字段
     ['params', 'data'].forEach((key) => {
       if (config[key]) {
@@ -55,6 +59,12 @@ request.interceptors.response.use(
   (response) => {
     const { url, method } = response.config
     removeCacheRequest(`${url}&${method}`)
+    const { code } = response.data
+    if (code === 401) {
+      clearToken()
+      router.push('/login')
+    }
+
     return response.data
   },
   async (error) => {

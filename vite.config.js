@@ -17,7 +17,7 @@ export default defineConfig({
     vueJsx(),
     UnoCSS(),
     AutoImport({
-      imports: ['vue', 'vue-router', '@vueuse/core', 'vue-i18n'],
+      imports: ['vue', 'vue-router', '@vueuse/core', 'vue-i18n', 'pinia'],
       dts: false,
     }),
     Components({
@@ -58,12 +58,12 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 8087,
+    port: 5100,
     https: false,
     proxy: {
       '/api': {
         // 匹配请求路径，
-        target: '', // 代理的目标地址
+        target: 'https://dev-admin-api.aurapura.app', // 代理的目标地址
         // 开发模式，默认的127.0.0.1,开启后代理服务会把origin修改为目标地址
         changeOrigin: true,
         // secure: true, // 是否https接口
