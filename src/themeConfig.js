@@ -8,7 +8,7 @@ export const { app, navbar, footer } = {
 
   },
   footer: {
-    title: 'Arco Pro',
+    title: 'AuraPura Admin',
   },
 
 }

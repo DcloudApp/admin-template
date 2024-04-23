@@ -50,7 +50,8 @@
     "nuxt",
     "antfu",
     "taze",
-    "doption"
+    "doption",
+    "sider"
   ],
   "i18n-ally.localesPaths": [
     "src/locales/modules"

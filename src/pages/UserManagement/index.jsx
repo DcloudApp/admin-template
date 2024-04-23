@@ -123,11 +123,9 @@ export default defineComponent({
                                 cell: ({ record }) => {
                                   return (
                                     <>
-                                      <a-avatar>
-                                        <img
-                                          alt="avatar"
-                                          src={record.avatar}
-                                        />
+                                      <a-avatar
+                                        imageUrl={record.avatar}
+                                      >
                                       </a-avatar>
                                     </>
                                   )
