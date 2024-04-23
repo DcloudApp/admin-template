@@ -52,3 +52,7 @@ body,html,#app{
   background: transparent;
 }
 
+/* 限制弹窗最大宽度 */
+.arco-modal{
+  max-width: calc(100% - 48px);
+}
