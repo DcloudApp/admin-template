@@ -52,5 +52,8 @@ body{
   padding: 0 20px 20px 20px;
 }
 
-
+/* 隐藏表格展开按钮背景 */
+.arco-table .arco-table-expand-btn{
+  background: transparent;
+}
 

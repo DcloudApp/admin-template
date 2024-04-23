@@ -176,13 +176,20 @@ export default defineComponent({
                     bordered={false}
                     row-key="id"
                     pagination={false}
-                    scrollbar={{ x: 2000, y: 200 }}
+                    scrollbar={true}
+                    scroll={{
+                      x: '100%',
+                      y: '100%',
+                    }}
                   >
                     {{
-
-                      columns: () => {
+                      'expand-icon': ({ expanded }) => {
+                        return <>{expanded ? <icon-down /> : <icon-right />}</>
+                      },
+                      'columns': () => {
                         return (
                           <>
+                            <a-table-column width="50"></a-table-column>
                             <a-table-column title="type" ellipsis tooltip>
                               {{ cell: ({ record }) => {
                                 return (
