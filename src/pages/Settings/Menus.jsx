@@ -264,10 +264,7 @@ export default defineComponent({
         <a-modal v-model:visible={visibleDialog.value} title="Menus" okText="Confirm" cancelText="Cancel">
           <a-form model={formModel.value} layout="vertical">
             <a-form-item field="name" hide-label>
-              <a-input
-                v-model={formModel.value.name}
-                placeholder="Name"
-              />
+              <a-input v-model={formModel.value.name} placeholder="Name" />
             </a-form-item>
             <a-form-item hide-label>
               <a-radio-group v-model={formModel.value.type}>
@@ -276,65 +273,44 @@ export default defineComponent({
                 <a-radio value={3}>Button</a-radio>
               </a-radio-group>
             </a-form-item>
-            {formModel.value.type !== 3
-              ? (
-                <>
-                  <a-form-item field="icon" hide-label>
-                    <a-select v-model={formModel.value.icon} placeholder="icon">
-                      {{
-                        label: () => {
-                          return (
+            {formModel.value.type !== 3 && (
+              <a-form-item field="icon" hide-label>
+                <a-select v-model={formModel.value.icon} placeholder="icon">
+                  {{
+                    label: () => (
+                      <div className="flex items-center gap-1">
+                        <div className={`i-${formModel.value.icon}`}></div>
+                        {formModel.value.icon}
+                      </div>
+                    ),
+                    default: () => (
+                      <>
+                        {MenuIcon.value.map(item => (
+                          <a-option value={item}>
                             <div className="flex items-center gap-1">
-                              <div className={`i-${formModel.value.icon}`}></div>
-                              {formModel.value.icon}
+                              <div className={`i-${item}`}></div>
+                              {item}
                             </div>
-                          )
-                        },
-                        default: () => {
-                          return (
-                            <>
-                              {MenuIcon.value.map((item) => {
-                                return (
-                                  <>
-                                    <a-option value={item}>
-                                      <div className="flex items-center gap-1">
-                                        <div className={`i-${item}`}></div>
-                                        {item}
-                                      </div>
-                                    </a-option>
-                                  </>
-                                )
-                              })}
-                            </>
-                          )
-                        },
-                      }}
+                          </a-option>
+                        ))}
+                      </>
+                    ),
+                  }}
+                </a-select>
+              </a-form-item>
+            )}
 
-                    </a-select>
-                  </a-form-item>
-                </>
-                )
-              : null}
+            {formModel.value.type !== 1 && (
+              <a-form-item field="perms" hide-label>
+                <a-input v-model={formModel.value.perms} placeholder="perms" />
+              </a-form-item>
+            )}
 
-            {formModel.value.type !== 1
-              ? (
-                <>
-                  <a-form-item field="perms" hide-label>
-                    <a-input v-model={formModel.value.perms} placeholder="perms" />
-                  </a-form-item>
-                </>
-                )
-              : null}
-
-            {formModel.value.type === 2
-              ? (
-                <>
-                  <a-form-item field="path" hide-label>
-                    <a-input v-model={formModel.value.path} placeholder="path" />
-                  </a-form-item>
-                </>
-                )
-              : null}
+            {formModel.value.type === 2 && (
+              <a-form-item field="path" hide-label>
+                <a-input v-model={formModel.value.path} placeholder="path" />
+              </a-form-item>
+            )}
 
             <a-form-item field="sort" hide-label>
               <a-input type="number" v-model={formModel.value.sort} placeholder="sort" />
@@ -345,6 +321,7 @@ export default defineComponent({
             </a-form-item>
           </a-form>
         </a-modal>
+
       </>
     )
   },
