@@ -77,7 +77,7 @@ export default defineComponent({
                             </>
                           )
                         }, default: () => {
-                          return <div>新建</div>
+                          return <div>New</div>
                         } }}
                       </a-button>
                     </a-col>
@@ -101,7 +101,7 @@ export default defineComponent({
                             </>
                           )
                         }, default: () => {
-                          return <div>搜索</div>
+                          return <div>Search</div>
                         } }}
                       </a-button>
                     </a-col>

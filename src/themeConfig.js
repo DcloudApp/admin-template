@@ -1,11 +1,8 @@
 // @unocss-include
-export const { app, navbar, footer } = {
+export const { app, footer } = {
   app: {
     title: 'AuraPura Admin',
     logo: 'i-svg-logo',
-  },
-  navbar: {
-
   },
   footer: {
     title: 'AuraPura Admin',

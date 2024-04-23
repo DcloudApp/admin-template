@@ -1,5 +1,6 @@
 // @unocss-include
 import { Modal } from '@arco-design/web-vue'
+import { onMounted, watch } from 'vue'
 import { menuIndex } from '@/https/api/setting'
 
 export default defineComponent({
@@ -51,7 +52,36 @@ export default defineComponent({
       }
     }
 
-    getMenuIndex()
+    // 搜索
+    function recursiveSearch(query, dataArray) {
+      const results = []
+      for (const item of dataArray) {
+        // 使用正则表达式进行模糊匹配
+        const regex = new RegExp(query, 'i')
+        // 如果当前节点的 name 字段匹配，则加入结果中
+        if (regex.test(item.name))
+          results.push(item)
+
+        // 如果有子节点，则递归搜索子节点
+        if (item.children && item.children.length > 0) {
+          const childResults = recursiveSearch(query, item.children)
+          results.push(...childResults)
+        }
+      }
+      return results
+    }
+
+    function searchName() {
+      if (searchForm.value.name) {
+        tableLoading.value = true
+        tableData.value = recursiveSearch(searchForm.value.name, tableData.value)
+        tableLoading.value = false
+      }
+    }
+    watch(() => searchForm.value.name, (newVal) => {
+      if (!newVal)
+        getMenuIndex()
+    })
 
     const generateFormModel = () => {
       return {
@@ -104,7 +134,9 @@ export default defineComponent({
         },
       })
     }
-
+    onMounted(() => {
+      getMenuIndex()
+    })
     return () => (
       <>
         <a-card title="Menus" class="general-card" bordered={false}>
@@ -116,13 +148,12 @@ export default defineComponent({
                     type="text"
                     shape="circle"
                     onClick={() => {
-                      generateSearchForm()
+                      searchForm.value = generateSearchForm()
                       getMenuIndex()
                     }}
                   >
                     <icon-refresh />
                   </a-button>
-
                 </>
               )
             },
@@ -145,7 +176,7 @@ export default defineComponent({
                             </>
                           )
                         }, default: () => {
-                          return <div>新建</div>
+                          return <div>New</div>
                         } }}
                       </a-button>
                     </a-col>
@@ -156,7 +187,7 @@ export default defineComponent({
                         placeholder="Search Menu Name"
                         allow-clear
                       />
-                      <a-button type="primary">
+                      <a-button type="primary" onClick={() => { searchName() }}>
                         {{ icon: () => {
                           return (
                             <>
@@ -164,7 +195,7 @@ export default defineComponent({
                             </>
                           )
                         }, default: () => {
-                          return <div>搜索</div>
+                          return <div>Search</div>
                         } }}
                       </a-button>
                     </a-col>
@@ -189,7 +220,7 @@ export default defineComponent({
                       'columns': () => {
                         return (
                           <>
-                            <a-table-column width="50"></a-table-column>
+                            <a-table-column width={50}></a-table-column>
                             <a-table-column title="type" ellipsis tooltip>
                               {{ cell: ({ record }) => {
                                 return (
