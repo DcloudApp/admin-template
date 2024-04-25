@@ -1,3 +1,4 @@
+<script lang='jsx'>
 import { useRouter } from 'vue-router'
 import { clearToken } from '@/utils/auth'
 
@@ -74,3 +75,4 @@ export default defineComponent({
     )
   },
 })
+</script>

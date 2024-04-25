@@ -3,22 +3,20 @@ import { createPinia } from 'pinia'
 import ArcoVue from '@arco-design/web-vue'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import { i18n } from '@/locales/index'
-import App from '@/App.jsx'
+import App from '@/App.vue'
 import router from '@/router'
 
 import '@unocss/reset/tailwind.css'
 import '@arco-design/web-vue/dist/arco.css'
 import './styles/main.css'
 import 'virtual:uno.css'
-import './permission.js'
 
 const app = createApp(App)
 
-app.use(i18n)
-
-app.use(createPinia())
-
 app.use(ArcoVue)
 app.use(ArcoVueIcon)
+app.use(i18n)
+app.use(createPinia())
 app.use(router)
+
 app.mount('#app')

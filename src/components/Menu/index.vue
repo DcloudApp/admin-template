@@ -1,3 +1,4 @@
+<script lang="jsx">
 import { computed } from 'vue'
 import { usePermissionStore } from '@/stores/usePermissionStore'
 import { userAppStore } from '@/stores/userAppStore'
@@ -34,7 +35,7 @@ export default defineComponent({
 
     const goto = (path) => {
       router.push({
-        path: `/${path}`,
+        path: path === 'index' ? '/' : `/${path}`,
       })
     }
 
@@ -115,3 +116,4 @@ export default defineComponent({
     )
   },
 })
+</script>

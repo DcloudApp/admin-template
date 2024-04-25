@@ -1,3 +1,4 @@
+<script lang='jsx'>
 export default defineComponent({
   props: {},
   emits: [],
@@ -27,3 +28,13 @@ export default defineComponent({
     )
   },
 })
+</script>
+
+<route lang="json5">
+  {
+    meta: {
+      layout: false,
+      requiresAuth:false,
+    }
+  }
+</route>

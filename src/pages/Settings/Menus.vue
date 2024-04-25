@@ -1,4 +1,13 @@
-// @unocss-include
+<route lang="json5">
+  {
+    name: 'Menus',
+    meta: {
+      requiresAuth:true,
+    }
+  }
+</route>
+
+<script lang='jsx'>
 import { Modal } from '@arco-design/web-vue'
 import { onMounted, watch } from 'vue'
 import { menuIndex } from '@/https/api/setting'
@@ -364,3 +373,4 @@ export default defineComponent({
     )
   },
 })
+</script>

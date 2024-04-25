@@ -1,5 +1,15 @@
-import LoginForm from '@/pages/Login/components/LoginForm'
-import Banner from '@/pages/Login/components/Banner'
+<route lang="json5">
+  {
+    meta: {
+      layout: false,
+      requiresAuth:false,
+    }
+  }
+</route>
+
+<script lang='jsx'>
+import LoginForm from '@/pages/Login/components/LoginForm.vue'
+import Banner from '@/pages/Login/components/Banner.vue'
 
 export default defineComponent({
   props: {},
@@ -24,3 +34,4 @@ export default defineComponent({
     )
   },
 })
+</script>

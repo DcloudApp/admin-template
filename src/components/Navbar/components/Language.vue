@@ -1,3 +1,4 @@
+<script lang='jsx'>
 import { loadLanguageAsync } from '@/locales/index'
 
 export default defineComponent({
@@ -70,3 +71,4 @@ export default defineComponent({
     )
   },
 })
+</script>

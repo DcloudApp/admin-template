@@ -1,3 +1,4 @@
+<script lang='jsx'>
 import { Message } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
 import useLoading from '@/hooks/loading'
@@ -148,3 +149,4 @@ export default defineComponent({
     )
   },
 })
+</script>

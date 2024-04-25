@@ -1,3 +1,4 @@
+<script lang='jsx'>
 import { app } from '@/themeConfig'
 
 export default defineComponent({
@@ -23,3 +24,4 @@ export default defineComponent({
     )
   },
 })
+</script>

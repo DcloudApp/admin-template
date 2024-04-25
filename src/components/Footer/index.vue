@@ -1,3 +1,4 @@
+<script lang='jsx'>
 import { footer } from '@/themeConfig'
 
 export default defineComponent({
@@ -11,3 +12,4 @@ export default defineComponent({
     )
   },
 })
+</script>

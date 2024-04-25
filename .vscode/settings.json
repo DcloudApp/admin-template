@@ -51,7 +51,8 @@
     "antfu",
     "taze",
     "doption",
-    "sider"
+    "sider",
+    "tabler"
   ],
   "i18n-ally.localesPaths": [
     "src/locales/modules"

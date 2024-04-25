@@ -1,3 +1,4 @@
+<script lang='jsx'>
 export default defineComponent({
   props: {},
   emits: [],
@@ -29,3 +30,4 @@ export default defineComponent({
     )
   },
 })
+</script>
