@@ -1,6 +1,4 @@
 <script lang='jsx'>
-import { required } from '@/utils/index'
-
 export default defineComponent({
   props: {},
   emits: [],
@@ -8,8 +6,8 @@ export default defineComponent({
     return () => (
       <>
         <div className="h-full w-full flex flex-col items-center justify-center">
-          <img className="w-300px flex dark:hidden" src={required('@/assets/img/auth-v2-forgot-password-illustration-light.png')} />
-          <img className="hidden w-300px dark:flex" src={required('@/assets/img/auth-v2-forgot-password-illustration-dark.png')} />
+          <img className="w-300px flex dark:hidden" src="../../../assets/img/login-logo-light.png" />
+          <img className="hidden w-300px dark:flex" src="../../../assets/img/login-logo-dark.png" />
         </div>
       </>
     )
