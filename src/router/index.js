@@ -5,6 +5,7 @@ import { isLogin } from '@/utils/auth'
 import { usePermissionStore } from '@/stores/usePermissionStore'
 
 const routes = []
+
 generatedRoutes.forEach((v) => {
   routes.push(v?.meta?.layout !== false ? setupLayouts([v])[0] : v)
 })
@@ -24,7 +25,7 @@ function checkPathExists(data, pathToCheck) {
       return true
 
     // 检查当前元素的"path"是否与要检查的"path"匹配
-    if (`/${data[i].path}` === pathToCheck) {
+    if (`/${data[i].path}` === pathToCheck || data[i].path === pathToCheck) {
       // 如果匹配，则返回true
       return true
     }
