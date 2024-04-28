@@ -57,9 +57,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // 静态资源分类打包
-        chunkFileNames: `js/[name]-[hash]${timesTamp}.js`,
-        entryFileNames: `js/[name]-[hash]${timesTamp}.js`,
-        assetFileNames: `[ext]/[name]-[hash]${timesTamp}.[ext]`,
+        chunkFileNames: `js/[hash]${timesTamp}.js`,
+        entryFileNames: `js/[hash]${timesTamp}.js`,
+        assetFileNames: `[ext]/[hash]${timesTamp}.[ext]`,
         manualChunks(id) {
           // 静态资源分拆打包
           if (id.includes('node_modules'))
