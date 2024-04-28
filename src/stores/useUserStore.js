@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { clearToken, setToken } from '@/utils/auth'
 import {
   login as userLogin,
-} from '@/https/api/user'
+} from '@/https/api/userApi'
 
 export const useUserStore = defineStore('user', () => {
   const userInfo = ref(null)

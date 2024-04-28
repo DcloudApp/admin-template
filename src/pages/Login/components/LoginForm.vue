@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import useLoading from '@/hooks/loading'
 import { useUserStore } from '@/stores/useUserStore'
 import { app } from '@/themeConfig'
-import { captcha } from '@/https/api/user'
+import { captcha } from '@/https/api/userApi'
 
 export default defineComponent({
   props: {},

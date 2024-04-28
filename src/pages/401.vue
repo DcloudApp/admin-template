@@ -11,7 +11,7 @@ export default defineComponent({
     return () => (
       <>
         <div class="h-full w-full flex flex-col items-center justify-center">
-          <a-result class="result" status="404" subtitle="Page has no permissions :("> </a-result>
+          <a-result class="result" status="401" subtitle="Page has no permissions :("> </a-result>
           <div class="operation-row">
             <a-button
               key="back"

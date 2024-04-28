@@ -10,7 +10,7 @@
 <script lang='jsx'>
 import { Modal } from '@arco-design/web-vue'
 import { onMounted, watch } from 'vue'
-import { menuIndex } from '@/https/api/setting'
+import { menuIndex } from '@/https/api/settingApi'
 
 export default defineComponent({
   props: {},

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { siteInfo } from '@/https/api/user'
+import { siteInfo } from '@/https/api/userApi'
 
 export const usePermissionStore = defineStore('usePermissionStore', () => {
   const menus = ref([])
