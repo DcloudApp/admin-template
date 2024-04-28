@@ -1,5 +1,5 @@
 export function getImageUrl(name) {
-  return new URL(`../assets/img/${name}`, import.meta.url).href
+  return new URL(`../assets/image/${name}`, import.meta.url).href
 }
 
 export function sortTreeData(data, flag) {
