@@ -1,6 +1,5 @@
 <script lang='jsx'>
-import loginLogoLight from '@/assets/img/login-logo-light.png'
-import loginLogoDark from '@/assets/img/login-logo-dark.png'
+import { getImageUrl } from '@/utils/index'
 
 export default defineComponent({
   props: {},
@@ -9,8 +8,8 @@ export default defineComponent({
     return () => (
       <>
         <div className="h-full w-full flex flex-col items-center justify-center">
-          <img className="w-300px flex dark:hidden" src={loginLogoLight} />
-          <img className="hidden w-300px dark:flex" src={loginLogoDark} />
+          <img className="w-300px flex dark:hidden" src={getImageUrl('login-logo-light.png')} />
+          <img className="hidden w-300px dark:flex" src={getImageUrl('login-logo-dark.png')} />
         </div>
       </>
     )

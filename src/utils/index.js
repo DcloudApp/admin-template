@@ -1,3 +1,7 @@
+export function getImageUrl(name) {
+  return new URL(`../assets/img/${name}`, import.meta.url).href
+}
+
 export function sortTreeData(data, flag) {
   let arr = []
   if (flag === 1)
