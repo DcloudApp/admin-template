@@ -4,11 +4,8 @@ import generatedRoutes from 'virtual:generated-pages'
 import { isLogin } from '@/utils/auth'
 import { usePermissionStore } from '@/stores/usePermissionStore'
 
-const routes = []
+const routes = generatedRoutes.map(v => v?.meta?.layout !== false ? setupLayouts([v])[0] : v)
 
-generatedRoutes.forEach((v) => {
-  routes.push(v?.meta?.layout !== false ? setupLayouts([v])[0] : v)
-})
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,

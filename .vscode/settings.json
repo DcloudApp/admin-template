@@ -52,10 +52,12 @@
     "taze",
     "doption",
     "sider",
-    "tabler"
+    "tabler",
+    "intlify"
   ],
   "i18n-ally.localesPaths": [
     "src/locales/modules"
   ],
-  "i18n-ally.keystyle": "nested"
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.review.enabled": true
 }
