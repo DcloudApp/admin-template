@@ -7,7 +7,7 @@ export default defineComponent({
   setup() {
     const languageList = ref([
       {
-        title: '中文',
+        title: '简体中文',
         code: 'zh',
       },
       {
@@ -46,11 +46,11 @@ export default defineComponent({
                   {languageList.value.map((item) => {
                     return (
                       <>
-                        <a-doption>
-                          <a-space onClick={() => {
-                            loadLanguageAsync(item.code)
-                          }}
-                          >
+                        <a-doption onClick={() => {
+                          loadLanguageAsync(item.code)
+                        }}
+                        >
+                          <a-space>
                             <span>
                               {item.title}
                             </span>

@@ -24,7 +24,7 @@ export default defineComponent({
 
     return () => (
       <>
-        <a-config-provider locale={localeVal.value}>
+        <a-config-provider global={true} locale={localeVal.value}>
           <RouterView />
         </a-config-provider>
       </>

@@ -1,11 +1,59 @@
-<route lang="json5">
+<i18n lang="json5">
   {
-    name: 'Menus',
-    meta: {
-      requiresAuth:true,
+    en: {
+      pageTitle: "Menus",
+      new:'New',
+      edit:'Edit',
+      delete:'Delete',
+      search:'Search',
+      searchName:'Search Menu Name',
+      type:'Type',
+      name:'Name',
+      sort:'sort',
+      icon:'Icon',
+      permission:'Permission',
+      path:'Path',
+      operation:'Operation',
+      catalogue:'Catalogue',
+      menu:'Menu',
+      button:'Button',
+      formModelPlaceholderName:'Please enter name',
+      formModelPlaceholderIcon:'Please select icon',
+      formModelPlaceholderPerms:'Please enter permission',
+      formModelPlaceholderPath:'Please enter the routing path',
+      formModelPlaceholderSort:'Please enter sort',
+      formModelIsHidden:'Is it displayed in the navigation bar?',
+      "InfoNotification": "Info Notification",
+      "deleteContent": "Are you sure you want to delete it?",
+    },
+    zh: {
+      pageTitle: "菜单",
+      new:'新建',
+      edit:'编辑',
+      delete:'删除',
+      search:'搜索',
+      searchName:'搜索菜单名称',
+      type:'类型',
+      name:'名称',
+      sort:'排序',
+      icon:'图标',
+      permission:'权限',
+      path:'路径',
+      operation:'操作',
+      catalogue:'目录',
+      menu:'菜单',
+      button:'按钮',
+      formModelPlaceholderName:'请输入名称',
+      formModelPlaceholderIcon:'请选择图标',
+      formModelPlaceholderPerms:'请输入权限',
+      formModelPlaceholderPath:'请输入路由路径',
+      formModelPlaceholderSort:'请输入排序',
+      formModelIsHidden:'是否在导航栏中显示？',
+      "InfoNotification": "信息通知",
+      "deleteContent": "您确定要删除它吗?",
     }
   }
-</route>
+</i18n>
 
 <script lang='jsx'>
 import { Modal } from '@arco-design/web-vue'
@@ -16,11 +64,8 @@ export default defineComponent({
   props: {},
   emits: [],
   setup() {
-    const menuText = {
-      1: { title: 'Catalogue', color: 'green' },
-      2: { title: 'Menu', color: 'orange' },
-      3: { title: 'Button', color: 'blue' },
-    }
+    const { t } = useI18n()
+    const menuText = ref([{ title: 'catalogue', value: 1, color: 'green' }, { title: 'menu', value: 2, color: 'orange' }, { title: 'button', value: 3, color: 'blue' }])
     const MenuIcon = ref([
       'tabler-smart-home',
       'tabler-settings',
@@ -92,6 +137,7 @@ export default defineComponent({
         getMenuIndex()
     })
 
+    const formRef = ref(null)
     const generateFormModel = () => {
       return {
         parent_id: 0,
@@ -124,15 +170,13 @@ export default defineComponent({
     function deleteDialog(_record) {
       Modal.info({
         width: 350,
-        title: 'Info Notification',
+        title: t('InfoNotification'),
         hideCancel: false,
-        okText: 'Confirm',
-        cancelText: 'Cancel',
         content: () => {
           return (
             <>
               <div className="w-full flex items-center justify-center">
-                Are you sure you want to delete it?
+                {t('deleteContent')}
               </div>
             </>
           )
@@ -143,12 +187,13 @@ export default defineComponent({
         },
       })
     }
+
     onMounted(() => {
       getMenuIndex()
     })
     return () => (
       <>
-        <a-card title="Menus" class="general-card" bordered={false}>
+        <a-card title={t('pageTitle')} class="general-card" bordered={false}>
           {{
             extra: () => {
               return (
@@ -185,7 +230,7 @@ export default defineComponent({
                             </>
                           )
                         }, default: () => {
-                          return <div>New</div>
+                          return <div>{t('new')}</div>
                         } }}
                       </a-button>
                     </a-col>
@@ -193,7 +238,7 @@ export default defineComponent({
                       <a-input
                         class="w-full"
                         v-model={searchForm.value.name}
-                        placeholder="Search Menu Name"
+                        placeholder={t('searchName')}
                         allow-clear
                       />
                       <a-button type="primary" onClick={() => { searchName() }}>
@@ -204,7 +249,7 @@ export default defineComponent({
                             </>
                           )
                         }, default: () => {
-                          return <div>Search</div>
+                          return <div>{t('search')}</div>
                         } }}
                       </a-button>
                     </a-col>
@@ -230,34 +275,34 @@ export default defineComponent({
                         return (
                           <>
                             <a-table-column width={50}></a-table-column>
-                            <a-table-column title="type" ellipsis tooltip>
+                            <a-table-column title={t('type')} ellipsis tooltip>
                               {{ cell: ({ record }) => {
                                 return (
                                   <>
-                                    <a-tag color={menuText[record.type].color}>
-                                      {menuText[record.type].title}
+                                    <a-tag color={menuText.value.find(item => item.value === record.type).color}>
+                                      {t(menuText.value.find(item => item.value === record.type).title) }
                                     </a-tag>
                                   </>
                                 )
                               },
                               }}
                             </a-table-column>
-                            {/* <a-table-column title="sort" data-index="sort" ellipsis tooltip></a-table-column> */}
-                            <a-table-column title="name" data-index="name" ellipsis tooltip></a-table-column>
-                            <a-table-column title="icon" data-index="icon" ellipsis tooltip>
+                            {/* <a-table-column title={t('sort')} data-index="sort" ellipsis tooltip></a-table-column> */}
+                            <a-table-column title={t('name')} data-index="name" ellipsis tooltip></a-table-column>
+                            <a-table-column title={t('icon')} data-index="icon" ellipsis tooltip>
                               {{
                                 cell: ({ record }) => {
                                   return <div className={`i-${record.icon}`}></div>
                                 },
                               }}
                             </a-table-column>
-                            <a-table-column title="permission" data-index="perms" ellipsis tooltip></a-table-column>
-                            <a-table-column title="path" data-index="path" ellipsis tooltip></a-table-column>
-                            <a-table-column align="center" fixed="right" width={130} title="operation">
+                            <a-table-column title={t('permission')} data-index="perms" ellipsis tooltip></a-table-column>
+                            <a-table-column title={t('path')} data-index="path" ellipsis tooltip></a-table-column>
+                            <a-table-column title={t('operation')} align="center" fixed="right" width={130}>
                               {{ cell: ({ record }) => {
                                 return (
                                   <>
-                                    <a-tooltip content="Add">
+                                    <a-tooltip content={t('new')}>
                                       <a-button
                                         type="text"
                                         shape="circle"
@@ -268,7 +313,7 @@ export default defineComponent({
                                         <icon-plus />
                                       </a-button>
                                     </a-tooltip>
-                                    <a-tooltip content="Edit">
+                                    <a-tooltip content={t('edit')}>
                                       <a-button
                                         type="text"
                                         shape="circle"
@@ -279,7 +324,7 @@ export default defineComponent({
                                         <icon-pen />
                                       </a-button>
                                     </a-tooltip>
-                                    <a-tooltip content="Delete">
+                                    <a-tooltip content={t('delete')}>
                                       <a-button
                                         type="text"
                                         shape="circle"
@@ -308,21 +353,55 @@ export default defineComponent({
 
         </a-card>
         {/* 弹窗 */}
-        <a-modal v-model:visible={visibleDialog.value} title="Menus" okText="Confirm" cancelText="Cancel">
-          <a-form model={formModel.value} layout="vertical">
-            <a-form-item field="name" hide-label>
-              <a-input v-model={formModel.value.name} placeholder="Name" />
+        <a-modal
+          v-model:visible={visibleDialog.value}
+          title={t('pageTitle')}
+          onBeforeOk={(done) => {
+            formRef.value.validate()
+              .then((res) => {
+                if (res) {
+                  done(false)
+                }
+                else {
+                  setTimeout(() => {
+                    done(true)
+                  }, 3000)
+                }
+              })
+              .catch(_error => done(false))
+          }}
+          unmountOnClose
+        >
+          <a-form
+            ref={formRef}
+            model={formModel.value}
+            layout="vertical"
+          >
+            <a-form-item field="name" hide-label validate-trigger="blur" required>
+              <a-input v-model={formModel.value.name} placeholder={t('formModelPlaceholderName')} />
             </a-form-item>
             <a-form-item hide-label>
-              <a-radio-group v-model={formModel.value.type}>
-                <a-radio value={1}>Catalogue</a-radio>
-                <a-radio value={2}>Menu</a-radio>
-                <a-radio value={3}>Button</a-radio>
+              <a-radio-group
+                v-model={formModel.value.type}
+                onChange={() => {
+                  formRef.value.clearValidate()
+                }}
+              >
+                {menuText.value.map((item) => {
+                  return (
+                    <>
+                      <a-radio value={item.value}>{t(item.title)}</a-radio>
+                    </>
+                  )
+                })}
               </a-radio-group>
             </a-form-item>
             {formModel.value.type !== 3 && (
-              <a-form-item field="icon" hide-label>
-                <a-select v-model={formModel.value.icon} placeholder="icon">
+              <a-form-item field="icon" hide-label validate-trigger="blur" required>
+                <a-select
+                  v-model={formModel.value.icon}
+                  placeholder={t('formModelPlaceholderIcon')}
+                >
                   {{
                     label: () => (
                       <div className="flex items-center gap-1">
@@ -348,23 +427,23 @@ export default defineComponent({
             )}
 
             {formModel.value.type !== 1 && (
-              <a-form-item field="perms" hide-label>
-                <a-input v-model={formModel.value.perms} placeholder="perms" />
+              <a-form-item field="perms" hide-label validate-trigger="blur" required>
+                <a-input v-model={formModel.value.perms} placeholder={t('formModelPlaceholderPerms')} />
               </a-form-item>
             )}
 
             {formModel.value.type === 2 && (
-              <a-form-item field="path" hide-label>
-                <a-input v-model={formModel.value.path} placeholder="path" />
+              <a-form-item field="path" hide-label validate-trigger="blur" required>
+                <a-input v-model={formModel.value.path} placeholder={t('formModelPlaceholderPath')} />
               </a-form-item>
             )}
 
-            <a-form-item field="sort" hide-label>
-              <a-input type="number" v-model={formModel.value.sort} placeholder="sort" />
+            <a-form-item field="sort" hide-label validate-trigger="blur" required>
+              <a-input type="number" v-model={formModel.value.sort} placeholder={t('formModelPlaceholderSort')} />
             </a-form-item>
             <a-form-item field="hidden" hide-label>
               <a-switch type="round" v-model={formModel.value.hidden} />
-              <div className="ml-2">Do you show him in the navigation bar?</div>
+              <div className="ml-2">{t('formModelIsHidden')}</div>
             </a-form-item>
           </a-form>
         </a-modal>
@@ -374,3 +453,12 @@ export default defineComponent({
   },
 })
 </script>
+
+<route lang="json5">
+  {
+    name: 'Menus',
+    meta: {
+      requiresAuth:true,
+    }
+  }
+</route>

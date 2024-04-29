@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import ArcoVue from '@arco-design/web-vue'
+import ArcoVue, { Modal } from '@arco-design/web-vue'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
 import { i18n } from '@/locales/index'
 import App from '@/App.vue'
@@ -13,6 +13,7 @@ import 'virtual:uno.css'
 
 const app = createApp(App)
 
+Modal._context = app._context
 app.use(ArcoVue)
 app.use(ArcoVueIcon)
 app.use(i18n)
