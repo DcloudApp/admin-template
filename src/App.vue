@@ -1,9 +1,11 @@
 <script  lang='jsx'>
 import enUS from '@arco-design/web-vue/es/locale/lang/en-us'
 import zhCN from '@arco-design/web-vue/es/locale/lang/zh-cn'
+import { watch } from 'vue'
 
 export default defineComponent({
   setup() {
+    const { locale } = useI18n()
     const isDark = useDark()
     watch(() => isDark.value, (newVal) => {
       if (newVal)
@@ -12,17 +14,17 @@ export default defineComponent({
         document.body.removeAttribute('arco-theme')
     }, { immediate: true })
 
-    const localeType = ref('en-US')
     const locales = {
-      'zh-CN': zhCN,
-      'en-US': enUS,
+      zh: zhCN,
+      en: enUS,
     }
-    const locale = computed(() => {
-      return locales[localeType.value] || enUS
+    const localeVal = computed(() => {
+      return locales[locale.value] || enUS
     })
+
     return () => (
       <>
-        <a-config-provider locale={locale.value}>
+        <a-config-provider locale={localeVal.value}>
           <RouterView />
         </a-config-provider>
       </>
