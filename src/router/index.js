@@ -12,7 +12,7 @@ const router = createRouter({
 })
 
 const LOGIN_PAGE_KEY = '/login'
-const PERMISSIONS = '401'
+const PERMISSIONS = '403'
 
 function checkPathExists(data, pathToCheck) {
   // 遍历数据数组
