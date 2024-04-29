@@ -51,6 +51,7 @@ router.beforeEach(async (to, from, next) => {
         const { menus, isLogin } = storeToRefs(usePermissionStores)
         if (!isLogin.value)
           await usePermissionStores.getUseInfo()
+        // 等待 getUseInfo 完成后再继续执行后续逻辑
         if (checkPathExists(menus.value, to.path))
           next()
         else
