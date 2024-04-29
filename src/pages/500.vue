@@ -1,11 +1,11 @@
 <i18n lang="json5">
   {
     en: {
-      subtitle: "Sorry, you do not have permission to access this resource～",
+      subtitle: "Sorry, there's a problem with the server～",
       BackHome:'Back To Home'
     },
     zh: {
-      subtitle: "对不起，您没有访问该资源的权限～",
+      subtitle: "抱歉，服务器出了点问题～",
       BackHome:'返回首页'
     }
   }
@@ -24,7 +24,7 @@ export default defineComponent({
     return () => (
       <>
         <div class="h-full w-full flex flex-col items-center justify-center">
-          <a-result class="result" status="403" subtitle={t('subtitle')}> </a-result>
+          <a-result class="result" status="500" subtitle={t('subtitle')}> </a-result>
           <div class="operation-row">
             <a-button
               key="back"

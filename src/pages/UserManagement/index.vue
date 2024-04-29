@@ -1,12 +1,3 @@
-<route lang="json5">
-  {
-    name: 'UserManagement',
-    meta: {
-      requiresAuth:true,
-    }
-  }
-</route>
-
 <script lang='jsx'>
 import { usersIndex } from '@/https/api/userManagementApi'
 
@@ -226,3 +217,12 @@ export default defineComponent({
   },
 })
 </script>
+
+<route lang="json5">
+  {
+    name: 'UserManagement',
+    meta: {
+      requiresAuth:true,
+    }
+  }
+</route>
