@@ -1,3 +1,443 @@
+<i18n lang="json5">
+  {
+    en: {
+      pageTitle: "Roles",
+      new:'New',
+      edit:'Edit',
+      delete:'Delete',
+      search:'Search',
+      searchName:'Search Roles Name',
+      name:'Name',
+      description:'Description',
+      operation:'Operation',
+
+      formModelPlaceholderName:'Please enter a roles name',
+      formModelPlaceholderDescription:'Please enter a roles description',
+
+      "InfoNotification": "Info Notification",
+      "deleteContent": "Are you sure you want to delete it?",
+    },
+    zh: {
+      pageTitle: "角色",
+      new:'新建',
+      edit:'编辑',
+      delete:'删除',
+      search:'搜索',
+      searchName:'搜索角色名称',
+      name:'名称',
+      description:'描述',
+      operation:'操作',
+
+      formModelPlaceholderName:'请输入角色名称',
+      formModelPlaceholderDescription:'请输入角色描述',
+
+      "InfoNotification": "信息通知",
+      "deleteContent": "您确定要删除它吗?",
+
+    }
+  }
+</i18n>
+
+<script lang='jsx'>
+import { Modal } from '@arco-design/web-vue'
+import { computed, onMounted, watch } from 'vue'
+import { menuIndex, roleDelete, roleIndex, roleInfo, roleSave } from '@/https/api/settingApi'
+import useLoading from '@/hooks/loading'
+
+export default defineComponent({
+  props: {},
+  emits: [],
+  setup() {
+    const { t } = useI18n()
+    const { loading, setLoading } = useLoading()
+
+    const tableLoading = ref(false)
+    const tableData = ref([])
+    const generateSearchForm = () => {
+      return {
+        name: '',
+      }
+    }
+    const searchForm = ref(generateSearchForm())
+
+    async function getRoleIndex() {
+      tableLoading.value = true
+      const { code, data } = await roleIndex()
+      if (code === 200) {
+        tableData.value = data.roles
+        tableLoading.value = false
+      }
+    }
+
+    // 搜索
+    function recursiveSearch(query, dataArray) {
+      const results = []
+      for (const item of dataArray) {
+        // 使用正则表达式进行模糊匹配
+        const regex = new RegExp(query, 'i')
+        // 如果当前节点的 name 字段匹配，则加入结果中
+        if (regex.test(item.name))
+          results.push(item)
+
+        // 如果有子节点，则递归搜索子节点
+        if (item.children && item.children.length > 0) {
+          const childResults = recursiveSearch(query, item.children)
+          results.push(...childResults)
+        }
+      }
+      return results
+    }
+
+    function searchName() {
+      if (searchForm.value.name) {
+        tableLoading.value = true
+        tableData.value = recursiveSearch(searchForm.value.name, tableData.value)
+        tableLoading.value = false
+      }
+    }
+    watch(() => searchForm.value.name, (newVal) => {
+      if (!newVal)
+        getRoleIndex()
+    })
+
+    const treeRef = ref(null)
+    const searchKey = ref('')
+    const checkedLength = ref(0)
+    const originTreeData = ref([])
+    async function getMenuIndex() {
+      const { code, data } = await menuIndex()
+      if (code === 200)
+        originTreeData.value = data.menus
+    }
+
+    const treeData = computed(() => {
+      if (!searchKey.value)
+        return originTreeData.value
+      return recursiveSearch(searchKey.value, originTreeData.value)
+    })
+
+    const indeterminate = ref(false)
+    const checkedAll = ref(false)
+
+    const formRef = ref(null)
+    const generateFormModel = () => {
+      return {
+        id: '',
+        name: '',
+        description: '',
+        role_menu: [],
+      }
+    }
+    const formModel = ref(generateFormModel())
+
+    // 新增弹窗
+    const visibleDialog = ref(false)
+    function addDialog(_record) {
+      indeterminate.value = false
+      checkedAll.value = false
+      formModel.value = generateFormModel()
+      if (_record && _record.id)
+        formModel.value.parent_id = _record.id
+      visibleDialog.value = true
+    }
+
+    // 修改弹窗
+    async function editDialog(_record) {
+      indeterminate.value = false
+      checkedAll.value = false
+      formModel.value = generateFormModel()
+      formModel.value = _record
+      visibleDialog.value = true
+      setLoading(true)
+      const { code, data } = await roleInfo({ id: formModel.value.id })
+      if (code === 200) {
+        checkedLength.value = data.role_menu.length
+        treeRef.value.checkNode(data.role_menu.map(Number), true)
+      }
+      setLoading(false)
+    }
+    // 全选
+    const handleChangeAll = (value) => {
+      indeterminate.value = false
+      if (value) {
+        checkedAll.value = true
+        treeRef.value.checkAll(true)
+      }
+      else {
+        checkedAll.value = false
+        treeRef.value.checkAll(false)
+      }
+    }
+
+    // 节点选择
+    const handleChange = (values) => {
+      formModel.value.role_menu = values
+      if (values.length === checkedLength.value) {
+        checkedAll.value = true
+        indeterminate.value = false
+      }
+      else if (values.length === 0) {
+        checkedAll.value = false
+        indeterminate.value = false
+      }
+      else {
+        checkedAll.value = false
+        indeterminate.value = true
+      }
+    }
+    // 删除弹窗
+    function deleteDialog(_record) {
+      Modal.info({
+        width: 350,
+        title: t('InfoNotification'),
+        hideCancel: false,
+        content: () => {
+          return (
+            <>
+              <div className="w-full flex items-center justify-center">
+                {t('deleteContent')}
+              </div>
+            </>
+          )
+        },
+        onBeforeOk: async (done) => {
+          // 确认按钮
+          const { code } = await roleDelete({ id: _record.id })
+          if (code === 200) {
+            done(true)
+            getRoleIndex()
+          }
+          else {
+            done(false)
+          }
+        },
+      })
+    }
+
+    async function dialogSubmit(done) {
+      const { code } = await roleSave(formModel.value)
+      if (code === 200) {
+        done(true)
+        getRoleIndex()
+      }
+    }
+
+    onMounted(() => {
+      getMenuIndex()
+      getRoleIndex()
+    })
+
+    return () => (
+      <>
+        <a-card title={t('pageTitle')} class="general-card" bordered={false}>
+          {{
+            extra: () => {
+              return (
+                <>
+                  <a-button
+                    type="text"
+                    shape="circle"
+                    onClick={() => {
+                      searchForm.value = generateSearchForm()
+                      getRoleIndex()
+                    }}
+                  >
+                    <icon-refresh />
+                  </a-button>
+                </>
+              )
+            },
+            default: () => {
+              return (
+                <>
+                  <a-row class="gap-2">
+                    <a-col xs={24} md={24} lg={2}>
+                      <a-button
+                        class="w-full"
+                        type="primary"
+                        onClick={() => {
+                          addDialog()
+                        }}
+                      >
+                        {{ icon: () => {
+                          return (
+                            <>
+                              <icon-plus />
+                            </>
+                          )
+                        }, default: () => {
+                          return <div>{t('new')}</div>
+                        } }}
+                      </a-button>
+                    </a-col>
+                    <a-col class="ml-auto flex gap-2" xs={24} md={24} lg={7}>
+                      <a-input
+                        class="w-full"
+                        v-model={searchForm.value.name}
+                        placeholder={t('searchName')}
+                        allow-clear
+                      />
+                      <a-button type="primary" onClick={() => { searchName() }}>
+                        {{ icon: () => {
+                          return (
+                            <>
+                              <icon-search />
+                            </>
+                          )
+                        }, default: () => {
+                          return <div>{t('search')}</div>
+                        } }}
+                      </a-button>
+                    </a-col>
+                  </a-row>
+                  <a-divider />
+                  <a-table
+                    data={tableData.value}
+                    loading={tableLoading.value}
+                    bordered={false}
+                    row-key="id"
+                    pagination={false}
+                    scrollbar={true}
+                    scroll={{
+                      x: '100%',
+                      y: '100%',
+                    }}
+                  >
+                    {{
+                      columns: () => {
+                        return (
+                          <>
+                            <a-table-column title={t('name')} data-index="name" ellipsis tooltip></a-table-column>
+                            <a-table-column title={t('description')} data-index="description" ellipsis tooltip></a-table-column>
+                            <a-table-column title={t('operation')} align="center" fixed="right" width={130}>
+                              {{ cell: ({ record }) => {
+                                return (
+                                  <>
+                                    <a-tooltip content={t('edit')}>
+                                      <a-button
+                                        type="text"
+                                        shape="circle"
+                                        onClick={() => {
+                                          editDialog(JSON.parse(JSON.stringify(record)))
+                                        }}
+                                      >
+                                        <icon-pen />
+                                      </a-button>
+                                    </a-tooltip>
+                                    <a-tooltip content={t('delete')}>
+                                      <a-button
+                                        type="text"
+                                        shape="circle"
+                                        status="danger"
+                                        onClick={() => {
+                                          deleteDialog(JSON.parse(JSON.stringify(record)))
+                                        }}
+                                      >
+                                        <icon-delete />
+                                      </a-button>
+                                    </a-tooltip>
+                                  </>
+                                )
+                              },
+                              }}
+                            </a-table-column>
+                          </>
+                        )
+                      },
+                    }}
+                  </a-table>
+                </>
+              )
+            },
+          }}
+
+        </a-card>
+        {/* 弹窗 */}
+        <a-modal
+          v-model:visible={visibleDialog.value}
+          title={t('pageTitle')}
+          onBeforeOk={(done) => {
+            formRef.value.validate()
+              .then((res) => {
+                if (res)
+                  done(false)
+                else
+                  dialogSubmit(done)
+              })
+              .catch(_error => done(false))
+          }}
+          unmountOnClose
+        >
+          <a-spin class="w-full" loading={loading.value}>
+            <a-form
+              ref={formRef}
+              model={formModel.value}
+              layout="vertical"
+            >
+              <a-form-item field="name" hide-label validate-trigger="blur" required>
+                <a-input v-model={formModel.value.name} placeholder={t('formModelPlaceholderName')} />
+              </a-form-item>
+              <a-form-item>
+                <div className="h-250px w-full flex flex-col">
+                  <a-input-search
+                    v-model={searchKey.value}
+                    placeholder="search menus name"
+                  >
+                    {{ prepend: () => {
+                      return (
+                        <>
+                          <a-checkbox
+                            model-value={checkedAll.value}
+                            indeterminate={indeterminate.value}
+                            onChange={(values) => {
+                              handleChangeAll(values)
+                            }}
+                          >
+                          </a-checkbox>
+                        </>
+                      )
+                    },
+
+                    }}
+                  </a-input-search>
+                  <div class="mt-1 flex-1 overflow-auto">
+                    <a-tree
+                      ref={treeRef}
+                      data={treeData.value}
+                      checkable={true}
+                      block-node={true}
+                      default-expand-all={false}
+                      fieldNames={{
+                        key: 'id',
+                        title: 'name',
+                        children: 'children',
+                        icon: 'icons',
+                      }}
+                      onCheck={(values, data) => {
+                        handleChange(values, data)
+                      }}
+                    >
+                    </a-tree>
+                  </div>
+                </div>
+
+              </a-form-item>
+              <a-form-item field="description" hide-label>
+                <a-textarea v-model={formModel.value.description} placeholder={t('formModelPlaceholderDescription')} allow-clear />
+              </a-form-item>
+
+            </a-form>
+
+          </a-spin>
+
+        </a-modal>
+
+      </>
+    )
+  },
+})
+</script>
+
 <route lang="json5">
   {
     name: 'Roles',
@@ -7,16 +447,26 @@
   }
 </route>
 
-<script lang='jsx'>
-export default defineComponent({
-  props: {},
-  emits: [],
-  setup() {
-    return () => (
-      <>
-        <div>Roles</div>
-      </>
-    )
-  },
-})
-</script>
+<style scoped>
+::-webkit-scrollbar {
+  width: 12px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 4px solid transparent;
+  background-clip: padding-box;
+  border-radius: 7px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-text-3);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-text-4);
+}
+
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+</style>
