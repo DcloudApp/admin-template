@@ -23,10 +23,12 @@ body,html,#app{
 }
 
 /* 隐藏表格展开按钮背景 */
-.arco-table .arco-table-expand-btn{
+.arco-table .arco-table-expand-btn {
   background: transparent;
 }
-
+.arco-table .arco-table-expand-btn:hover{
+  background: transparent;
+}
 /* 限制弹窗最大宽度 */
 .arco-modal{
   max-width: calc(100% - 48px);

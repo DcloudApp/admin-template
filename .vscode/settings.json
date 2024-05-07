@@ -53,7 +53,8 @@
     "doption",
     "sider",
     "tabler",
-    "intlify"
+    "intlify",
+    "hasPermi"
   ],
   "i18n-ally.localesPaths": [
     "src/locales/modules"

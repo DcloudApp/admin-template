@@ -24,7 +24,7 @@
       formModelPlaceholderSort:'Please enter sort',
       formModelIsHidden:'Is it displayed in the navigation bar?',
       "InfoNotification": "Info Notification",
-      "deleteContent": "Are you sure you want to delete it?",
+      "deleteContent": "Are you sure you want to delete {name}?",
     },
     zh: {
       pageTitle: "菜单",
@@ -50,7 +50,7 @@
       formModelPlaceholderSort:'请输入排序',
       formModelIsHidden:'是否在导航栏中显示？',
       "InfoNotification": "信息通知",
-      "deleteContent": "您确定要删除它吗?",
+      "deleteContent": "您确定要删除{name}吗?",
     }
   }
 </i18n>
@@ -58,7 +58,8 @@
 <script lang='jsx'>
 import { Modal } from '@arco-design/web-vue'
 import { onMounted, watch } from 'vue'
-import { menuIndex } from '@/https/api/settingApi'
+import { menuDelete, menuIndex, menuSave } from '@/https/api/settingApi'
+import { sortTreeData } from '@/utils/index'
 
 export default defineComponent({
   props: {},
@@ -147,7 +148,7 @@ export default defineComponent({
         perms: '',
         path: '',
         sort: '',
-        hidden: false,
+        hidden: 0,
       }
     }
     const formModel = ref(generateFormModel())
@@ -168,22 +169,28 @@ export default defineComponent({
     }
     // 删除弹窗
     function deleteDialog(_record) {
-      Modal.info({
+      Modal.warning({
         width: 350,
         title: t('InfoNotification'),
         hideCancel: false,
         content: () => {
           return (
             <>
-              <div className="w-full flex items-center justify-center">
-                {t('deleteContent')}
+              <div className="w-full flex items-center justify-center text-center">
+                {t('deleteContent', { name: `${menuText.value.find(item => item.value === _record.type).title} ${_record.name}` })}
               </div>
             </>
           )
         },
-        onOk: () => {
-          // 确认按钮
-          // console.log(record.id)
+        onBeforeOk: async (done) => {
+          const { code } = await menuDelete({ id: _record.id })
+          if (code === 200) {
+            done(true)
+            getMenuIndex()
+          }
+          else {
+            done(false)
+          }
         },
       })
     }
@@ -217,6 +224,7 @@ export default defineComponent({
                   <a-row class="gap-2">
                     <a-col xs={24} md={24} lg={2}>
                       <a-button
+                        v-hasPermi="['/v1/menu/save']"
                         class="w-full"
                         type="primary"
                         onClick={() => {
@@ -256,7 +264,7 @@ export default defineComponent({
                   </a-row>
                   <a-divider />
                   <a-table
-                    data={tableData.value}
+                    data={sortTreeData(tableData.value)}
                     loading={tableLoading.value}
                     bordered={false}
                     row-key="id"
@@ -287,8 +295,8 @@ export default defineComponent({
                               },
                               }}
                             </a-table-column>
-                            {/* <a-table-column title={t('sort')} data-index="sort" ellipsis tooltip></a-table-column> */}
                             <a-table-column title={t('name')} data-index="name" ellipsis tooltip></a-table-column>
+                            <a-table-column title={t('sort')} data-index="sort" align="center" ellipsis tooltip></a-table-column>
                             <a-table-column title={t('icon')} data-index="icon" ellipsis tooltip>
                               {{
                                 cell: ({ record }) => {
@@ -304,6 +312,7 @@ export default defineComponent({
                                   <>
                                     <a-tooltip content={t('new')}>
                                       <a-button
+                                        v-hasPermi="['/v1/menu/save']"
                                         type="text"
                                         shape="circle"
                                         onClick={() => {
@@ -315,6 +324,7 @@ export default defineComponent({
                                     </a-tooltip>
                                     <a-tooltip content={t('edit')}>
                                       <a-button
+                                        v-hasPermi="['/v1/menu/save']"
                                         type="text"
                                         shape="circle"
                                         onClick={() => {
@@ -326,6 +336,7 @@ export default defineComponent({
                                     </a-tooltip>
                                     <a-tooltip content={t('delete')}>
                                       <a-button
+                                        v-hasPermi="['/v1/menu/delete']"
                                         type="text"
                                         shape="circle"
                                         status="danger"
@@ -358,14 +369,17 @@ export default defineComponent({
           title={t('pageTitle')}
           onBeforeOk={(done) => {
             formRef.value.validate()
-              .then((res) => {
+              .then(async (res) => {
                 if (res) {
                   done(false)
                 }
                 else {
-                  setTimeout(() => {
+                  formModel.value.hidden = formModel.value.hidden ? 1 : 0
+                  const { code } = await menuSave(formModel.value)
+                  if (code === 200) {
+                    getMenuIndex()
                     done(true)
-                  }, 3000)
+                  }
                 }
               })
               .catch(_error => done(false))

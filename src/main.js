@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import ArcoVue, { Modal } from '@arco-design/web-vue'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
+import directives from '@/directive/index'
 import { i18n } from '@/locales/index'
 import App from '@/App.vue'
 import router from '@/router'
@@ -13,10 +14,12 @@ import 'virtual:uno.css'
 
 const app = createApp(App)
 
+app.use(directives)
 Modal._context = app._context
 app.use(ArcoVue)
 app.use(ArcoVueIcon)
 app.use(i18n)
+
 app.use(createPinia())
 app.use(router)
 

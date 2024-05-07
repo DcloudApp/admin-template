@@ -15,7 +15,7 @@
       formModelPlaceholderDescription:'Please enter a roles description',
 
       "InfoNotification": "Info Notification",
-      "deleteContent": "Are you sure you want to delete it?",
+      "deleteContent": "Are you sure you want to delete roles {name}?",
     },
     zh: {
       pageTitle: "角色",
@@ -32,7 +32,7 @@
       formModelPlaceholderDescription:'请输入角色描述',
 
       "InfoNotification": "信息通知",
-      "deleteContent": "您确定要删除它吗?",
+      "deleteContent": "您确定要删除角色{name}吗?",
 
     }
   }
@@ -43,12 +43,16 @@ import { Modal } from '@arco-design/web-vue'
 import { computed, onMounted, watch } from 'vue'
 import { menuIndex, roleDelete, roleIndex, roleInfo, roleSave } from '@/https/api/settingApi'
 import useLoading from '@/hooks/loading'
+import { usePermissionStore } from '@/stores/usePermissionStore'
+import { sortTreeData } from '@/utils/index'
 
 export default defineComponent({
   props: {},
   emits: [],
   setup() {
     const { t } = useI18n()
+
+    const usePermissionStores = usePermissionStore()
     const { loading, setLoading } = useLoading()
 
     const tableLoading = ref(false)
@@ -102,8 +106,27 @@ export default defineComponent({
 
     const treeRef = ref(null)
     const searchKey = ref('')
-    const checkedLength = ref(0)
+    function extractIds(obj) {
+      const ids = []
+
+      function extract(obj) {
+        for (const key in obj) {
+          if (typeof obj[key] === 'object')
+            extract(obj[key])
+          else if (key === 'id')
+            ids.push(obj[key])
+        }
+      }
+
+      extract(obj)
+
+      return ids
+    }
     const originTreeData = ref([])
+    const checkedLength = computed(() => {
+      return extractIds(originTreeData.value).length
+    })
+
     async function getMenuIndex() {
       const { code, data } = await menuIndex()
       if (code === 200)
@@ -150,28 +173,27 @@ export default defineComponent({
       visibleDialog.value = true
       setLoading(true)
       const { code, data } = await roleInfo({ id: formModel.value.id })
-      if (code === 200) {
-        checkedLength.value = data.role_menu.length
-        treeRef.value.checkNode(data.role_menu.map(Number), true)
-      }
+      if (code === 200)
+        treeRef.value.checkNode(data.role_menu.map(Number), true, true)
+
       setLoading(false)
     }
     // 全选
     const handleChangeAll = (value) => {
       indeterminate.value = false
       if (value) {
-        checkedAll.value = true
         treeRef.value.checkAll(true)
+        checkedAll.value = true
       }
       else {
-        checkedAll.value = false
         treeRef.value.checkAll(false)
+        checkedAll.value = false
       }
     }
 
+    const halfChecked = ref([])
     // 节点选择
-    const handleChange = (values) => {
-      formModel.value.role_menu = values
+    const handleChange = (values, data) => {
       if (values.length === checkedLength.value) {
         checkedAll.value = true
         indeterminate.value = false
@@ -184,18 +206,19 @@ export default defineComponent({
         checkedAll.value = false
         indeterminate.value = true
       }
+      formModel.value.role_menu = [...values, ...data.halfCheckedKeys]
     }
     // 删除弹窗
     function deleteDialog(_record) {
-      Modal.info({
+      Modal.warning({
         width: 350,
         title: t('InfoNotification'),
         hideCancel: false,
         content: () => {
           return (
             <>
-              <div className="w-full flex items-center justify-center">
-                {t('deleteContent')}
+              <div className="w-full flex items-center justify-center text-center">
+                {t('deleteContent', { name: _record.name })}
               </div>
             </>
           )
@@ -217,6 +240,7 @@ export default defineComponent({
     async function dialogSubmit(done) {
       const { code } = await roleSave(formModel.value)
       if (code === 200) {
+        await usePermissionStores.getUseInfo()
         done(true)
         getRoleIndex()
       }
@@ -403,10 +427,11 @@ export default defineComponent({
                   <div class="mt-1 flex-1 overflow-auto">
                     <a-tree
                       ref={treeRef}
-                      data={treeData.value}
+                      data={sortTreeData(treeData.value)}
                       checkable={true}
                       block-node={true}
                       default-expand-all={false}
+                      half-checked-keys={halfChecked.value}
                       fieldNames={{
                         key: 'id',
                         title: 'name',
