@@ -70,6 +70,7 @@ export default defineComponent({
   emits: [],
   setup() {
     const { t } = useI18n()
+    const { width } = useWindowSize()
 
     const tableLoading = ref(false)
     const tableData = ref([])
@@ -78,8 +79,8 @@ export default defineComponent({
         page: 1,
         page_size: 20,
         count: 0,
-        name: '',
-        email: '',
+        search_username: '',
+        search_email: '',
         role: '',
       }
     }
@@ -192,7 +193,7 @@ export default defineComponent({
                         <a-col span={8}>
                           <a-input
                             class="w-full"
-                            v-model={searchForm.value.name}
+                            v-model={searchForm.value.search_username}
                             placeholder={t('searchNamePlaceholder')}
                             allow-clear
                           />
@@ -200,7 +201,7 @@ export default defineComponent({
                         <a-col span={8}>
                           <a-input
                             class="w-full"
-                            v-model={searchForm.value.email}
+                            v-model={searchForm.value.search_email}
                             placeholder={t('searchEmailPlaceholder')}
                             allow-clear
                           />
@@ -275,9 +276,11 @@ export default defineComponent({
                       searchForm.value.page_size = pageSize
                       getTableList()
                     }}
+                    scroll={{ x: 1000 }}
                     pagination={{
                       'show-total': true,
-                      'show-page-size': true,
+                      'show-page-size': width.value > 430,
+                      'simple': width.value < 960,
                       'total': searchForm.value.count,
                       'current': searchForm.value.page,
                       'pageSize': searchForm.value.page_size,
@@ -288,7 +291,7 @@ export default defineComponent({
                       columns: () => {
                         return (
                           <>
-                            <a-table-column title={t('tableId')} data-index="id" ellipsis tooltip></a-table-column>
+                            <a-table-column width={70} title={t('tableId')} data-index="id" ellipsis tooltip></a-table-column>
                             <a-table-column title={t('tableLastNameFirstName')} ellipsis tooltip>
                               {{ cell: ({ record }) => {
                                 return <>{`${record.last_name} ${record.first_name}`}</>
@@ -308,7 +311,7 @@ export default defineComponent({
                               }}
                             </a-table-column>
                             <a-table-column title={t('tableCreated')} data-index="created_at" ellipsis tooltip></a-table-column>
-                            <a-table-column align="center" fixed="right" width={130} title={t('tableOperation')}>
+                            <a-table-column align="center" fixed="right" width={100} title={t('tableOperation')}>
                               {{ cell: ({ record }) => {
                                 return (
                                   <>

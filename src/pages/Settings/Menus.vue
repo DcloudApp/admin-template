@@ -270,11 +270,8 @@ export default defineComponent({
                     bordered={false}
                     row-key="id"
                     pagination={false}
-                    scrollbar={true}
-                    scroll={{
-                      x: '100%',
-                      y: '100%',
-                    }}
+
+                    scroll={{ x: 900 }}
                   >
                     {{
                       'expand-icon': ({ expanded }) => {
