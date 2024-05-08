@@ -152,8 +152,9 @@ export default defineComponent({
       }
     }
     const formModel = ref(generateFormModel())
-    // 新增弹窗
     const visibleDialog = ref(false)
+
+    // 新增弹窗
     function addDialog(_record) {
       formModel.value = generateFormModel()
       if (_record && _record.id)

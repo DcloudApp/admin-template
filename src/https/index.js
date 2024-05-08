@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Message } from '@arco-design/web-vue'
 import { clearToken, getToken } from '@/utils/auth'
 import router from '@/router'
 
@@ -14,7 +15,7 @@ const { isCancel } = axios
 // 请求队列，缓存发出的请求
 const cacheRequest = {}
 // 不进行重复请求拦截的白名单
-const cacheWhiteList = ['']
+const cacheWhiteList = ['/user/uploadmedia']
 
 function removeCacheRequest(reqKey) {
   if (cacheRequest[reqKey]) {
@@ -59,10 +60,16 @@ request.interceptors.response.use(
   (response) => {
     const { url, method } = response.config
     removeCacheRequest(`${url}&${method}`)
-    const { code } = response.data
+    const { code, msg } = response.data
     if (code === 401) {
       clearToken()
       router.push('/login')
+    }
+    if (code !== 200) {
+      Message.error({
+        content: msg,
+        duration: 3000,
+      })
     }
 
     return response.data

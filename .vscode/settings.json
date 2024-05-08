@@ -54,7 +54,8 @@
     "sider",
     "tabler",
     "intlify",
-    "hasPermi"
+    "hasPermi",
+    "uploadmedia"
   ],
   "i18n-ally.localesPaths": [
     "src/locales/modules"

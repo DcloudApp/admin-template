@@ -19,7 +19,7 @@ export default defineComponent({
     const { t } = useI18n()
     const router = useRouter()
     const back = () => {
-      router.push({ path: '/' })
+      router.back()
     }
     return () => (
       <>

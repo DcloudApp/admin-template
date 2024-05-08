@@ -71,3 +71,29 @@ export function adminIndex(data) {
 export function roleGetAll(data) {
   return request.post('/v1/role/get-all', data)
 }
+/**
+ * @desc 创建后台用户
+ * email 邮箱
+ * password 密码
+ * user_role 角色
+ */
+export function adminCreate(data) {
+  return request.post('/v1/admin/create', data)
+}
+/**
+ * @desc 编辑后台用户
+ * id 编辑的用户id
+ * email 编辑邮箱
+ * password 编辑密码
+ * user_role 编辑角色
+ */
+export function adminEdit(data) {
+  return request.post('/v1/admin/edit', data)
+}
+/**
+ * @desc 删除后台用户
+ * id:删除用户id
+ */
+export function adminDelete(data) {
+  return request.post('/v1/admin/delete', data)
+}
