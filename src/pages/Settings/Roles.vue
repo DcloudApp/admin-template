@@ -12,6 +12,7 @@
       operation:'Operation',
 
       formModelPlaceholderName:'Please enter a roles name',
+      formModelPlaceholderSearchKey:'search menus name',
       formModelPlaceholderDescription:'Please enter a roles description',
 
       "InfoNotification": "Info Notification",
@@ -29,6 +30,7 @@
       operation:'操作',
 
       formModelPlaceholderName:'请输入角色名称',
+      formModelPlaceholderSearchKey:'搜索菜单名称',
       formModelPlaceholderDescription:'请输入角色描述',
 
       "InfoNotification": "信息通知",
@@ -405,7 +407,7 @@ export default defineComponent({
                 <div className="h-250px w-full flex flex-col">
                   <a-input-search
                     v-model={searchKey.value}
-                    placeholder="search menus name"
+                    placeholder={t('formModelPlaceholderSearchKey')}
                   >
                     {{ prepend: () => {
                       return (
