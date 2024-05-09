@@ -44,8 +44,8 @@ export default defineComponent({
         <a-menu
           class="h-full max-w-240px"
           style="box-shadow: 0 2px 5px 0 rgba(0,0,0,0.08);"
-          default-open-keys={[settingsMenu.value.parent_id]}
-          default-selected-keys={[settingsMenu.value.id]}
+          default-open-keys={[settingsMenu.value?.parent_id]}
+          default-selected-keys={[settingsMenu.value?.id]}
           show-collapse-button
           onCollapse={(type) => {
             collapse.value = type

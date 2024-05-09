@@ -26,6 +26,7 @@
 <script lang='jsx'>
 import { Modal } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
+import { usePermissionStore } from '@/stores/usePermissionStore'
 import { clearToken } from '@/utils/auth'
 
 export default defineComponent({
@@ -34,6 +35,7 @@ export default defineComponent({
   setup() {
     const { t } = useI18n()
     const router = useRouter()
+    const usePermissionStores = usePermissionStore()
 
     return () => (
       <>
@@ -95,8 +97,9 @@ export default defineComponent({
                           )
                         },
                         onOk: () => {
-                          clearToken()
                           router.push('/login')
+                          usePermissionStores.reset()
+                          clearToken()
                         },
                       })
                     }}
