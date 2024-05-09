@@ -86,7 +86,7 @@ export default defineComponent({
                                 </>
                               )
                             }, icon: () => {
-                              return <div className="i-tabler-users"></div>
+                              return <div className={`i-${item.icon}`}></div>
                             }, title: () => {
                               return <div>{item.name}</div>
                             } }}
@@ -106,7 +106,7 @@ export default defineComponent({
                             }}
                           >
                             {{ icon: () => {
-                              return <div className="i-tabler-users"></div>
+                              return <div className={`i-${item.icon}`}></div>
                             }, default: () => {
                               return <div>{item.name}</div>
                             } }}

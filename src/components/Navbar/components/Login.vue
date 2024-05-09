@@ -1,21 +1,15 @@
 <i18n lang="json5">
   {
     en: {
-      "switchRoles": "Switch Roles",
-      "userCenter": "User Center",
       "userSettings": "User Settings",
       "logout": "Logout",
-      "settings": "Settings",
       "InfoNotification": "Info Notification",
-      "logOutContent": "Are you sure you want to log out?",
+      "logOutContent": "Are you sure you want to logout?",
 
     },
     zh: {
-      "switchRoles": "切换角色",
-      "userCenter": "用户中心",
       "userSettings": "用户设置",
       "logout": "登出登录",
-      "settings": "设置",
       "InfoNotification": "信息通知",
       "logOutContent": "您确定要退出登录吗？",
 
@@ -57,22 +51,6 @@ export default defineComponent({
             content: () => {
               return (
                 <>
-                  <a-doption>
-                    <a-space>
-                      <icon-tag />
-                      <span>
-                        {t('switchRoles')}
-                      </span>
-                    </a-space>
-                  </a-doption>
-                  <a-doption>
-                    <a-space>
-                      <icon-user />
-                      <span>
-                        {t('userCenter')}
-                      </span>
-                    </a-space>
-                  </a-doption>
                   <a-doption>
                     <a-space>
                       <icon-settings />
