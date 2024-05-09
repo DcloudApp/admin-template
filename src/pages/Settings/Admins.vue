@@ -187,44 +187,36 @@ export default defineComponent({
             default: () => {
               return (
                 <>
-                  <a-row>
-                    <a-col flex={1}>
-                      <a-row gutter={16}>
-                        <a-col span={8}>
-                          <a-input
-                            class="w-full"
-                            v-model={searchForm.value.search_username}
-                            placeholder={t('searchNamePlaceholder')}
-                            allow-clear
-                          />
-                        </a-col>
-                        <a-col span={8}>
-                          <a-input
-                            class="w-full"
-                            v-model={searchForm.value.search_email}
-                            placeholder={t('searchEmailPlaceholder')}
-                            allow-clear
-                          />
-                        </a-col>
-                        <a-col span={8}>
-                          <a-select
-                            v-model={searchForm.value.role}
-                            placeholder={t('searchRolesPlaceholder')}
-                            allow-clear
-                          >
-                            {roleAllList.value.map((item) => {
-                              return (
-                                <>
-                                  <a-option value={item.id}>{item.name}</a-option>
-                                </>
-                              )
-                            })}
-                          </a-select>
-                        </a-col>
-                      </a-row>
-                    </a-col>
-                    <a-divider class="h-32px" direction="vertical" />
-                    <a-col flex="86px">
+                  <div className="w-full flex flex-col gap-5 md:flex-row md:gap-0">
+                    <div className="flex flex-1 flex-col gap-5 md:flex-row">
+                      <a-input
+                        class="w-full"
+                        v-model={searchForm.value.search_username}
+                        placeholder={t('searchNamePlaceholder')}
+                        allow-clear
+                      />
+                      <a-input
+                        class="w-full"
+                        v-model={searchForm.value.search_email}
+                        placeholder={t('searchEmailPlaceholder')}
+                        allow-clear
+                      />
+                      <a-select
+                        v-model={searchForm.value.role}
+                        placeholder={t('searchRolesPlaceholder')}
+                        allow-clear
+                      >
+                        {roleAllList.value.map((item) => {
+                          return (
+                            <>
+                              <a-option value={item.id}>{item.name}</a-option>
+                            </>
+                          )
+                        })}
+                      </a-select>
+                    </div>
+                    <a-divider class="hidden h-32px md:inline-block" direction="vertical" />
+                    <div>
                       <a-button
                         type="primary"
                         onClick={() => {
@@ -241,8 +233,9 @@ export default defineComponent({
                           return <div>{t('search')}</div>
                         } }}
                       </a-button>
-                    </a-col>
-                  </a-row>
+                    </div>
+                  </div>
+
                   <a-divider />
                   <a-button
                     v-hasPermi="['/v1/admin/create']"

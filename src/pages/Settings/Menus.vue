@@ -222,11 +222,10 @@ export default defineComponent({
             default: () => {
               return (
                 <>
-                  <a-row class="gap-2">
-                    <a-col xs={24} md={24} lg={2}>
+                  <div className="w-full flex flex-col gap-5 md:flex-row md:justify-between">
+                    <div>
                       <a-button
                         v-hasPermi="['/v1/menu/save']"
-                        class="w-full"
                         type="primary"
                         onClick={() => {
                           addDialog()
@@ -242,27 +241,33 @@ export default defineComponent({
                           return <div>{t('new')}</div>
                         } }}
                       </a-button>
-                    </a-col>
-                    <a-col class="ml-auto flex gap-2" xs={24} md={24} lg={7}>
+                    </div>
+                    <div className="flex flex-1 flex-col justify-end gap-5 md:flex-row">
                       <a-input
-                        class="w-full"
+                        class="w-full md:max-w-320px md:w-full"
                         v-model={searchForm.value.name}
                         placeholder={t('searchName')}
                         allow-clear
                       />
-                      <a-button type="primary" onClick={() => { searchName() }}>
-                        {{ icon: () => {
-                          return (
-                            <>
-                              <icon-search />
-                            </>
-                          )
-                        }, default: () => {
-                          return <div>{t('search')}</div>
-                        } }}
-                      </a-button>
-                    </a-col>
-                  </a-row>
+                      <div>
+                        <a-button
+                          type="primary"
+                          onClick={() => { searchName() }}
+                        >
+                          {{ icon: () => {
+                            return (
+                              <>
+                                <icon-search />
+                              </>
+                            )
+                          }, default: () => {
+                            return <div>{t('search')}</div>
+                          } }}
+                        </a-button>
+                      </div>
+                    </div>
+                  </div>
+
                   <a-divider />
                   <a-table
                     data={sortTreeData(tableData.value)}
