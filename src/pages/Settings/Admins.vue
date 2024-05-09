@@ -429,15 +429,14 @@ export default defineComponent({
               validate-trigger="blur"
               rules={[{ required: !formModel.value.id, message: `${t('required', { name: 'Password' })}` }]}
             >
-              <a-input
+              <a-input-password
                 input-attrs={{ autoComplete: 'new-password' }}
-                type="password"
                 v-model={formModel.value.password}
                 placeholder={t('formModelPlaceholderPassword')}
-                max-length={30}
                 allow-clear
-                show-word-limit
-              />
+              >
+              </a-input-password>
+
             </a-form-item>
             <a-form-item
               field="user_role"
