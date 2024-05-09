@@ -1,7 +1,7 @@
 <i18n lang="json5">
   {
     en: {
-      pageTitle: "Roles",
+      pageTitle: "Role management",
       new:'New',
       edit:'Edit',
       delete:'Delete',
@@ -19,7 +19,7 @@
       "deleteContent": "Are you sure you want to delete roles {name}?",
     },
     zh: {
-      pageTitle: "角色",
+      pageTitle: "角色管理",
       new:'新建',
       edit:'编辑',
       delete:'删除',

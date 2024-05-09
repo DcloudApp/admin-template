@@ -1,7 +1,7 @@
 <i18n lang="json5">
   {
     en: {
-      pageTitle: "Admins",
+      pageTitle: "Background user management",
       new:'New',
       edit:'Edit',
       delete:'Delete',
@@ -30,7 +30,7 @@
 
     },
     zh: {
-      pageTitle: "管理员",
+      pageTitle: "后台用户管理",
       new:'新建',
       edit:'编辑',
       delete:'删除',

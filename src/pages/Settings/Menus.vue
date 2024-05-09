@@ -1,7 +1,7 @@
 <i18n lang="json5">
   {
     en: {
-      pageTitle: "Menus",
+      pageTitle: "Menu management",
       new:'New',
       edit:'Edit',
       delete:'Delete',
@@ -27,7 +27,7 @@
       "deleteContent": "Are you sure you want to delete {name}?",
     },
     zh: {
-      pageTitle: "菜单",
+      pageTitle: "菜单管理",
       new:'新建',
       edit:'编辑',
       delete:'删除',

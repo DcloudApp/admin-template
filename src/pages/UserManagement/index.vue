@@ -1,13 +1,19 @@
 <i18n lang="json5">
   {
     en: {
-      pageTitle: "Admins",
+      pageTitle: "User management",
       new:'New',
       view:'View',
       edit:'Edit',
       delete:'Delete',
       search:'Search',
-      searchNamePlaceholder:'Search user Name',
+      reset:'Reset',
+      searchNamePlaceholder:'Enter user Name',
+      searchGuidPlaceholder:'Enter user guid',
+      searchRegisteredPlaceholder:'Select registered source',
+      searchEmailPlaceholder:'Enter user email',
+      searchPhonePlaceholder:'Enter user phone',
+      advancedFilter:'Filter',
 
       tableAvatar:'Avatar',
       tableUserName:'User Name',
@@ -22,18 +28,23 @@
 
       "InfoNotification": "Info Notification",
       "deleteContent": "Are you sure you want to delete user {username}?",
-
       required:'{name} is required'
 
     },
     zh: {
-      pageTitle: "管理员",
+      pageTitle: "用户管理",
       new:'新建',
       view:'查看',
       edit:'编辑',
       delete:'删除',
       search:'搜索',
-      searchNamePlaceholder:'搜索用户名称',
+      reset:'重置',
+      searchNamePlaceholder:'输入用户名称',
+      searchGuidPlaceholder:'输入用户唯一标识',
+      searchRegisteredPlaceholder:'选择注册源',
+      searchEmailPlaceholder:'输入用户邮箱',
+      searchPhonePlaceholder:'输入用户手机号码',
+      advancedFilter:'高级筛选',
 
       tableAvatar:'头像',
       tableUserName:'用户名',
@@ -79,6 +90,12 @@ export default defineComponent({
       2: { title: 'Unknown', value: 2, color: '' },
       3: { title: 'Transsexuals', value: 3, color: '' },
     }
+    const registeredList = [
+      { title: 'web', value: 1 },
+      { title: 'app', value: 2 },
+      { title: 'test', value: 4 },
+      { title: 'crawler', value: 5 },
+    ]
     const tableLoading = ref(false)
     const tableData = ref([])
     const generateSearchForm = () => {
@@ -87,6 +104,10 @@ export default defineComponent({
         page_size: 20,
         count: 0,
         search_username: '',
+        search_guid: '',
+        from_type: '',
+        search_email: '',
+        search_phone: '',
       }
     }
     const searchForm = ref(generateSearchForm())
@@ -137,7 +158,7 @@ export default defineComponent({
 
     return () => (
       <>
-        <a-card title="UserManagement" class="general-card" bordered={false}>
+        <a-card title={t('pageTitle')} class="general-card" bordered={false}>
           {{
             extra: () => {
               return (
@@ -146,7 +167,7 @@ export default defineComponent({
                     type="text"
                     shape="circle"
                     onClick={() => {
-                      generateSearchForm()
+                      searchForm.value = generateSearchForm()
                       getTableList()
                     }}
                   >
@@ -159,33 +180,83 @@ export default defineComponent({
             default: () => {
               return (
                 <>
-                  <a-row class="gap-2">
-                    <a-col xs={24} md={24} lg={2}>
-                      <a-button
-                        class="w-full"
-                        type="primary"
-                        onClick={() => {
-                          addDialog()
+
+                  <div className="w-full flex flex-col gap-5 md:flex-row md:gap-0">
+                    <div className="flex flex-1 flex-col gap-5">
+                      <div className="flex flex-1 flex-col gap-5 md:flex-row">
+                        <a-input
+                          class="w-full"
+                          v-model={searchForm.value.search_username}
+                          placeholder={t('searchNamePlaceholder')}
+                          allow-clear
+                        />
+                        <a-input
+                          class="w-full"
+                          v-model={searchForm.value.search_guid}
+                          placeholder={t('searchGuidPlaceholder')}
+                          allow-clear
+                        />
+                        <a-select
+                          v-model={searchForm.value.from_type}
+                          placeholder={t('searchRegisteredPlaceholder')}
+                          allow-clear
+                        >
+                          {registeredList.map((item) => {
+                            return (
+                              <>
+                                <a-option value={item.value}>{item.title}</a-option>
+                              </>
+                            )
+                          })}
+                        </a-select>
+                      </div>
+                    </div>
+                    <a-divider class="hidden md:inline-block" direction="vertical" />
+                    <div className="relative flex gap-2">
+                      <a-dropdown trigger="click" position={width.value >= 678 ? 'br' : 'tl'}>
+                        {{
+                          default: () => {
+                            return (
+                              <>
+                                <a-button
+                                  type="outline"
+                                >
+                                  {{ icon: () => {
+                                    return (
+                                      <>
+                                        <icon-find-replace />
+                                      </>
+                                    )
+                                  }, default: () => {
+                                    return <div>{t('advancedFilter')}</div>
+                                  } }}
+
+                                </a-button>
+                              </>
+                            )
+                          },
+                          content: () => {
+                            return (
+                              <>
+                                <div className="w-278px flex flex-col gap-5 p-5 md:w-350px">
+                                  <a-input
+                                    v-model={searchForm.value.search_email}
+                                    placeholder={t('searchEmailPlaceholder')}
+                                    allow-clear
+                                  />
+                                  <a-input
+                                    v-model={searchForm.value.search_phone}
+                                    placeholder={t('searchPhonePlaceholder')}
+                                    allow-clear
+                                  />
+
+                                </div>
+                              </>
+                            )
+                          },
                         }}
-                      >
-                        {{ icon: () => {
-                          return (
-                            <>
-                              <icon-plus />
-                            </>
-                          )
-                        }, default: () => {
-                          return <div>{t('new')}</div>
-                        } }}
-                      </a-button>
-                    </a-col>
-                    <a-col class="ml-auto flex gap-2" xs={24} md={24} lg={7}>
-                      <a-input
-                        class="w-full"
-                        v-model={searchForm.value.search_username}
-                        placeholder={t('searchNamePlaceholder')}
-                        allow-clear
-                      />
+                      </a-dropdown>
+
                       <a-button
                         type="primary"
                         onClick={() => {
@@ -202,8 +273,26 @@ export default defineComponent({
                           return <div>{t('search')}</div>
                         } }}
                       </a-button>
-                    </a-col>
-                  </a-row>
+                    </div>
+                  </div>
+
+                  <a-divider />
+                  <a-button
+                    type="primary"
+                    onClick={() => {
+                      addDialog()
+                    }}
+                  >
+                    {{ icon: () => {
+                      return (
+                        <>
+                          <icon-plus />
+                        </>
+                      )
+                    }, default: () => {
+                      return <div>{t('new')}</div>
+                    } }}
+                  </a-button>
                   <a-divider />
                   <a-table
                     data={tableData.value}
