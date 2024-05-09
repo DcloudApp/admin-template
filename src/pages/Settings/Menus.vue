@@ -303,7 +303,7 @@ export default defineComponent({
                             <a-table-column title={t('icon')} data-index="icon" ellipsis tooltip>
                               {{
                                 cell: ({ record }) => {
-                                  return <div className={`i-${record.icon}`}></div>
+                                  return <div className={`${record.icon}`}></div>
                                 },
                               }}
                             </a-table-column>
@@ -422,7 +422,7 @@ export default defineComponent({
                   {{
                     label: () => (
                       <div className="flex items-center gap-1">
-                        <div className={`i-${formModel.value.icon}`}></div>
+                        <div className={`${formModel.value.icon}`}></div>
                         {formModel.value.icon}
                       </div>
                     ),
@@ -431,7 +431,7 @@ export default defineComponent({
                         {MenuIcon.value.map(item => (
                           <a-option value={item}>
                             <div className="flex items-center gap-1">
-                              <div className={`i-${item}`}></div>
+                              <div className={`${item}`}></div>
                               {item}
                             </div>
                           </a-option>
