@@ -1,5 +1,6 @@
 <script lang="jsx">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
+import { useWindowSize } from '@vueuse/core'
 import { usePermissionStore } from '@/stores/usePermissionStore'
 import { userAppStore } from '@/stores/userAppStore'
 
@@ -8,13 +9,14 @@ export default defineComponent({
   emits: [],
   setup() {
     // const { t } = useI18n()
+    const { width } = useWindowSize()
     const router = useRouter()
     const route = useRoute()
 
     const usePermissionStores = usePermissionStore()
     const { menus } = storeToRefs(usePermissionStores)
     const userAppStores = userAppStore()
-    const { collapse } = storeToRefs(userAppStores)
+    const { collapse, drawerVisible } = storeToRefs(userAppStores)
 
     const settingsMenu = computed(() => {
       const findMenuItem = (items) => {
@@ -34,11 +36,16 @@ export default defineComponent({
     })
 
     const goto = (path) => {
+      drawerVisible.value = false
       router.push({
         path: path === 'index' ? '/' : `/${path}`,
       })
     }
 
+    watch(() => width.value, (newVal) => {
+      if (newVal >= 768)
+        drawerVisible.value = false
+    })
     return () => (
       <>
         <a-menu
@@ -46,7 +53,7 @@ export default defineComponent({
           style="box-shadow: 0 2px 5px 0 rgba(0,0,0,0.08);"
           default-open-keys={[settingsMenu.value?.parent_id]}
           default-selected-keys={[settingsMenu.value?.id]}
-          show-collapse-button
+          show-collapse-button={!drawerVisible.value}
           onCollapse={(type) => {
             collapse.value = type
           }}

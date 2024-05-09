@@ -1,6 +1,5 @@
 <script lang='jsx'>
 import { userAppStore } from '@/stores/userAppStore'
-import { app } from '@/themeConfig'
 
 export default defineComponent({
   props: {},
@@ -14,10 +13,7 @@ export default defineComponent({
         <div className="h-full w-full flex">
           <div className={`h-full overflow-hidden hidden md:flex-col md:flex ${collapse.value ? `md:w-48px` : `md:w-240px`}`}>
             <div className="h-70px w-full flex items-center justify-center gap-2 bg-[var(--color-bg-2)]">
-              <div className={`h-33px w-33px ${app.logo}`} />
-              <div className={`text-18px font-500 text-[var(--color-text-1)] ${collapse.value ? `hidden` : `flex`}`}>
-                {app.title}
-              </div>
+              <Logo showTitle={!collapse.value} />
             </div>
             <div className="flex-1 overflow-hidden">
               <Menu />

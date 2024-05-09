@@ -33,3 +33,7 @@ body,html,#app{
 .arco-modal{
   max-width: calc(100% - 48px);
 }
+
+.arco-drawer-body {
+  padding: 0;
+}
