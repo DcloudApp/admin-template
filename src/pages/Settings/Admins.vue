@@ -152,7 +152,10 @@ export default defineComponent({
       dialogTitle.value = title
       formModel.value = generateFormModel()
       if (_record && _record.id) {
-        formModel.value = JSON.parse(JSON.stringify(_record))
+        Object.keys(formModel.value).forEach((key) => {
+          if (Object.prototype.hasOwnProperty.call(_record, key))
+            formModel.value[key] = _record[key]
+        })
         formModel.value.password = ''
       }
       visibleDialog.value = true

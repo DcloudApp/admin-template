@@ -165,8 +165,6 @@ export default defineComponent({
       indeterminate.value = false
       checkedAll.value = false
       formModel.value = generateFormModel()
-      if (_record && _record.id)
-        formModel.value.parent_id = _record.id
       visibleDialog.value = true
     }
 
@@ -176,7 +174,10 @@ export default defineComponent({
       indeterminate.value = false
       checkedAll.value = false
       formModel.value = generateFormModel()
-      formModel.value = _record
+      Object.keys(formModel.value).forEach((key) => {
+        if (Object.prototype.hasOwnProperty.call(_record, key))
+          formModel.value[key] = _record[key]
+      })
       visibleDialog.value = true
       setLoading(true)
       const { code, data } = await roleInfo({ id: formModel.value.id })
@@ -344,7 +345,7 @@ export default defineComponent({
                                         type="text"
                                         shape="circle"
                                         onClick={() => {
-                                          editDialog(JSON.parse(JSON.stringify(record)))
+                                          editDialog(record)
                                         }}
                                       >
                                         <icon-pen />
@@ -357,7 +358,7 @@ export default defineComponent({
                                         shape="circle"
                                         status="danger"
                                         onClick={() => {
-                                          deleteDialog(JSON.parse(JSON.stringify(record)))
+                                          deleteDialog(record)
                                         }}
                                       >
                                         <icon-delete />

@@ -168,7 +168,10 @@ export default defineComponent({
     function editDialog(_record, title = t('edit')) {
       dialogTitle.value = title
       formModel.value = generateFormModel()
-      formModel.value = JSON.parse(JSON.stringify(_record))
+      Object.keys(formModel.value).forEach((key) => {
+        if (Object.prototype.hasOwnProperty.call(_record, key))
+          formModel.value[key] = _record[key]
+      })
       formModel.value.sort = `${formModel.value.sort}`
       visibleDialog.value = true
     }

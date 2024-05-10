@@ -167,7 +167,7 @@ export default defineComponent({
 
     const generateFormModel = () => {
       return {
-        id: '',
+        guid: '',
         username: '',
         avatar: '',
         fileList: [],
@@ -192,9 +192,12 @@ export default defineComponent({
     function addOrEditDialog(_record, title = t('new')) {
       dialogTitle.value = title
       formModel.value = generateFormModel()
-      if (_record && _record.id) {
-        formModel.value = JSON.parse(JSON.stringify(_record))
-        formModel.value.srcList = [JSON.parse(JSON.stringify(_record)).avatar]
+      if (_record && _record.guid) {
+        Object.keys(formModel.value).forEach((key) => {
+          if (Object.prototype.hasOwnProperty.call(_record, key))
+            formModel.value[key] = _record[key]
+        })
+        formModel.value.srcList = [formModel.value.avatar]
       }
       visibleDialog.value = true
     }
@@ -490,13 +493,15 @@ export default defineComponent({
                 return
               }
 
-              const uploadPromises = formModel.value.fileList.map(fileObj => filesUpload({ files: fileObj.file, type: 'avatar' }))
+              const uploadPromises = formModel.value.fileList?.map(fileObj => filesUpload({ files: fileObj.file, type: 'avatar' }))
+              if (uploadPromises.length > 0) {
+                const data = await Promise.all(uploadPromises)
+                data.forEach((item) => {
+                  if (item.code === 200)
+                    formModel.value.avatar = item.data.url
+                })
+              }
 
-              const data = uploadPromises.length > 0 && await Promise.all(uploadPromises)
-              data.forEach((item) => {
-                if (item.code === 200)
-                  formModel.value.avatar = item.data.url
-              })
               const { code } = await usersSave(formModel.value)
               if (code === 200) {
                 done(true)
@@ -564,7 +569,6 @@ export default defineComponent({
               field="email"
               hide-label
               validate-trigger="blur"
-              rules={[{ required: true, message: `${t('required', { name: 'Email' })}` }]}
             >
               <a-input
                 v-model={formModel.value.email}

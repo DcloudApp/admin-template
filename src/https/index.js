@@ -34,18 +34,17 @@ request.interceptors.request.use(
       return config
     }
 
-    ['params', 'data'].forEach((key) => {
-      if (config[key]) {
-        config[key] = Object.fromEntries(
-          Object.entries(config[key]).filter(([_, value]) =>
-            value !== null && value !== '' && value !== undefined
-            && !(Array.isArray(value) && value.length === 0)
-            && !(typeof value === 'object' && Object.keys(value).length === 0)
-            && !(typeof value === 'number' || typeof value === 'boolean'), // 不过滤数值类型和布尔类型的属性
-          ),
-        )
-      }
-    })
+    // ['params', 'data'].forEach((key) => {
+    //   if (config[key]) {
+    //     config[key] = Object.fromEntries(
+    //       Object.entries(config[key]).filter(([_, value]) =>
+    //         value !== null && value !== undefined
+    //         && !(Array.isArray(value) && value.length === 0)
+    //         && !(typeof value === 'object' && Object.keys(value).length === 0),
+    //       ),
+    //     )
+    //   }
+    // })
 
     const { url, method } = config
     // 请求地址和请求方式组成唯一标识，将这个标识作为取消函数的key，保存到请求队列中
