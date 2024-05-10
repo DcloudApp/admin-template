@@ -28,8 +28,12 @@
 
       "InfoNotification": "Info Notification",
       "deleteContent": "Are you sure you want to delete user {username}?",
-      required:'{name} is required'
+      required:'{name} is required',
 
+      dialogTitle:'{title} user',
+      formModelPlaceholderUserName:'Enter user name',
+      formModelPlaceholderCellphoneNumber:'Enter user cellphone',
+      formModelPlaceholderEmail:'Enter user email',
     },
     zh: {
       pageTitle: "用户管理",
@@ -59,8 +63,12 @@
 
       "InfoNotification": "信息通知",
       "deleteContent": "您确定要删除用户{username}吗?",
-      required:'{name} 是必填项'
+      required:'{name} 是必填项',
 
+      dialogTitle:'{title}用户',
+      formModelPlaceholderUserName:'输入用户名称',
+      formModelPlaceholderCellphoneNumber:'输入用户手机号码',
+      formModelPlaceholderEmail:'输入用户邮箱',
     }
   }
 </i18n>
@@ -69,7 +77,7 @@
 import { onMounted } from 'vue'
 import { Modal } from '@arco-design/web-vue'
 import { useWindowSize } from '@vueuse/core'
-import { usersIndex } from '@/https/api/userManagementApi'
+import { filesUpload, usersDelete, usersIndex, usersSave } from '@/https/api/userManagementApi'
 
 export default defineComponent({
   props: {},
@@ -78,18 +86,18 @@ export default defineComponent({
     const { t } = useI18n()
     const { width } = useWindowSize()
 
-    const is_healer = {
-      0: { title: 'no', color: '' },
-      1: { title: 'Yes', color: '' },
-      2: { title: 'Applying', color: '' },
-      3: { title: 'Refuse', color: '' },
-    }
-    const GenderGroup = {
-      0: { title: 'Male', value: 0, color: '' },
-      1: { title: 'Female', value: 1, color: '' },
-      2: { title: 'Unknown', value: 2, color: '' },
-      3: { title: 'Transsexuals', value: 3, color: '' },
-    }
+    const is_healer = [
+      { title: 'no', value: '0', color: '' },
+      { title: 'Yes', value: '1', color: '' },
+      { title: 'Applying', value: '2', color: '' },
+      { title: 'Refuse', value: '3', color: '' },
+    ]
+    const GenderGroup = [
+      { title: 'Male', value: '0', color: '' },
+      { title: 'Female', value: '1', color: '' },
+      { title: 'Unknown', value: '2', color: '' },
+      { title: 'Transsexuals', value: '3', color: '' },
+    ]
     const registeredList = [
       { title: 'web', value: 1 },
       { title: 'app', value: 2 },
@@ -138,19 +146,57 @@ export default defineComponent({
         },
         onBeforeOk: async (done) => {
           // 确认按钮
-          // const { code } = await adminDelete({ id: _record.id })
-          // if (code === 200) {
-          //   done(true)
-          //   getTableList()
-          // }
-          // else {
-          //   done(false)
-          // }
-          setTimeout(() => {
+          const { code } = await usersDelete({ guid: _record.guid })
+          if (code === 200) {
             done(true)
-          }, 3000)
+            getTableList()
+          }
+          else {
+            done(false)
+          }
         },
       })
+    }
+    //  弹窗
+    const visibleDialog = ref(false)
+    const formRef = ref(null)
+    const countryCodeList = ref([
+      '+86',
+      '+55',
+    ])
+
+    const generateFormModel = () => {
+      return {
+        id: '',
+        username: '',
+        avatar: '',
+        fileList: [],
+        srcList: [],
+        country_code: '+86',
+        cellphone_number: '',
+        email: '',
+      }
+    }
+    const formModel = ref(generateFormModel())
+    const dialogTitle = ref(t('new'))
+
+    // 查看弹窗
+    const showViewDialog = ref(false)
+    function viewDialog(_record, title = t('new')) {
+      dialogTitle.value = title
+      formModel.value = JSON.parse(JSON.stringify(_record))
+      showViewDialog.value = true
+    }
+
+    // 新增弹窗 修改弹窗
+    function addOrEditDialog(_record, title = t('new')) {
+      dialogTitle.value = title
+      formModel.value = generateFormModel()
+      if (_record && _record.id) {
+        formModel.value = JSON.parse(JSON.stringify(_record))
+        formModel.value.srcList = [JSON.parse(JSON.stringify(_record)).avatar]
+      }
+      visibleDialog.value = true
     }
     onMounted(() => {
       getTableList()
@@ -180,7 +226,6 @@ export default defineComponent({
             default: () => {
               return (
                 <>
-
                   <div className="w-full flex flex-col gap-5 md:flex-row md:gap-0">
                     <div className="flex flex-1 flex-col gap-5">
                       <div className="flex flex-1 flex-col gap-5 md:flex-row">
@@ -280,7 +325,7 @@ export default defineComponent({
                   <a-button
                     type="primary"
                     onClick={() => {
-                      addDialog()
+                      addOrEditDialog()
                     }}
                   >
                     {{ icon: () => {
@@ -355,7 +400,9 @@ export default defineComponent({
                                 cell: ({ record }) => {
                                   return (
                                     <>
-                                      <a-tag color={GenderGroup[record.gender]?.color || ''}>{GenderGroup[record.gender]?.title ?? 'Other' }</a-tag>
+                                      <a-tag color={GenderGroup.find(item => item.value === record.gender)?.color || ''}>
+                                        {GenderGroup.find(item => item.value === record.gender)?.title || 'Other' }
+                                      </a-tag>
                                     </>
                                   )
                                 },
@@ -366,7 +413,7 @@ export default defineComponent({
                                 cell: ({ record }) => {
                                   return (
                                     <>
-                                      <a-tag color={is_healer[record.is_healer].color}>{is_healer[record.is_healer].title}</a-tag>
+                                      <a-tag color={is_healer.find(item => item.value === record.is_healer)?.color}>{is_healer.find(item => item.value === record.is_healer)?.title}</a-tag>
                                     </>
                                   )
                                 },
@@ -384,7 +431,7 @@ export default defineComponent({
                                         type="text"
                                         shape="circle"
                                         onClick={() => {
-                                          addDialog(JSON.parse(JSON.stringify(record)))
+                                          viewDialog(record, t('view'))
                                         }}
                                       >
                                         <icon-eye />
@@ -395,7 +442,7 @@ export default defineComponent({
                                         type="text"
                                         shape="circle"
                                         onClick={() => {
-                                          editDialog(JSON.parse(JSON.stringify(record)))
+                                          addOrEditDialog(record, t('edit'))
                                         }}
                                       >
                                         <icon-pen />
@@ -429,7 +476,128 @@ export default defineComponent({
           }}
 
         </a-card>
+        {/* 新增编辑弹窗 */}
+        <a-modal
+          v-model:visible={visibleDialog.value}
+          title={t('dialogTitle', { title: dialogTitle.value })}
+          unmountOnClose
+          onBeforeOk={async (done) => {
+            try {
+              const isValid = await formRef.value.validate()
 
+              if (isValid) {
+                done(false)
+                return
+              }
+
+              const uploadPromises = formModel.value.fileList.map(fileObj => filesUpload({ files: fileObj.file, type: 'avatar' }))
+
+              const data = uploadPromises.length > 0 && await Promise.all(uploadPromises)
+              data.forEach((item) => {
+                if (item.code === 200)
+                  formModel.value.avatar = item.data.url
+              })
+              const { code } = await usersSave(formModel.value)
+              if (code === 200) {
+                done(true)
+                getTableList()
+              }
+              else {
+                done(false)
+              }
+            }
+            catch (error) {
+              done(false)
+            }
+          }}
+        >
+          <a-form
+            ref={formRef}
+            model={formModel.value}
+            layout="vertical"
+          >
+            <a-form-item
+              field="srcList"
+              hide-label
+              validate-trigger="blur"
+              rules={[{ required: true, message: `${t('required', { name: 'Avatar' })}` }]}
+            >
+              <AppUpload v-model:srcList={formModel.value.srcList} v-model:fileList={formModel.value.fileList} />
+            </a-form-item>
+            <a-form-item
+              field="username"
+              hide-label
+              validate-trigger="blur"
+              rules={[{ required: true, message: `${t('required', { name: 'User Name' })}` }]}
+            >
+              <a-input
+                v-model={formModel.value.username}
+                placeholder={t('formModelPlaceholderUserName')}
+                max-length={30}
+                allow-clear
+                show-word-limit
+              />
+            </a-form-item>
+
+            <a-form-item
+              field="cellphone_number"
+              hide-label
+              validate-trigger="blur"
+              rules={[{ required: true, message: `${t('required', { name: 'Cellphone' })}` }]}
+            >
+
+              <a-input-group class="w-full">
+                <a-select class="w-90px" options={countryCodeList.value} v-model={formModel.value.country_code} />
+                <a-input
+                  class="flex-1"
+                  v-model={formModel.value.cellphone_number}
+                  placeholder={t('formModelPlaceholderCellphoneNumber')}
+                  max-length={30}
+                  allow-clear
+                  show-word-limit
+                >
+
+                </a-input>
+              </a-input-group>
+            </a-form-item>
+            <a-form-item
+              field="email"
+              hide-label
+              validate-trigger="blur"
+              rules={[{ required: true, message: `${t('required', { name: 'Email' })}` }]}
+            >
+              <a-input
+                v-model={formModel.value.email}
+                placeholder={t('formModelPlaceholderEmail')}
+                max-length={30}
+                allow-clear
+                show-word-limit
+              />
+            </a-form-item>
+          </a-form>
+        </a-modal>
+        {/* 查看弹窗 */}
+        <a-modal
+          v-model:visible={showViewDialog.value}
+          title={t('dialogTitle', { title: dialogTitle.value })}
+          unmountOnClose
+        >
+          <a-form
+            ref={formRef}
+            model={formModel.value}
+            layout="vertical"
+          >
+            <a-form-item
+              field="last_name"
+              hide-label
+              validate-trigger="blur"
+              rules={[{ required: true, message: `${t('required', { name: 'Last Name' })}` }]}
+            >
+              {/* <AppUpload /> */}
+            </a-form-item>
+
+          </a-form>
+        </a-modal>
       </>
     )
   },

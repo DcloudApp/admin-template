@@ -15,7 +15,7 @@ const { isCancel } = axios
 // 请求队列，缓存发出的请求
 const cacheRequest = {}
 // 不进行重复请求拦截的白名单
-const cacheWhiteList = ['/user/uploadmedia']
+const cacheWhiteList = []
 
 function removeCacheRequest(reqKey) {
   if (cacheRequest[reqKey]) {
@@ -27,17 +27,26 @@ function removeCacheRequest(reqKey) {
 request.interceptors.request.use(
   async (config) => {
     // If token is found
-    config.headers.Authorization = `Bearer ${getToken()}`;
+    config.headers.Authorization = `Bearer ${getToken()}`
     // 移除参数中为 null、空字符串、空数组或空对象的字段
+    if (config.headers['Content-Type'] && config.headers['Content-Type'].startsWith('multipart/form-data')) {
+      // 文件上传直接返回config，不做处理
+      return config
+    }
+
     ['params', 'data'].forEach((key) => {
       if (config[key]) {
-        Object.keys(config[key]).forEach((param) => {
-          const value = config[key][param]
-          if (value === null || value === '' || (Array.isArray(value) && value.length === 0) || (typeof value === 'object' && Object.keys(value).length === 0))
-            delete config[key][param]
-        })
+        config[key] = Object.fromEntries(
+          Object.entries(config[key]).filter(([_, value]) =>
+            value !== null && value !== '' && value !== undefined
+            && !(Array.isArray(value) && value.length === 0)
+            && !(typeof value === 'object' && Object.keys(value).length === 0)
+            && !(typeof value === 'number' || typeof value === 'boolean'), // 不过滤数值类型和布尔类型的属性
+          ),
+        )
       }
     })
+
     const { url, method } = config
     // 请求地址和请求方式组成唯一标识，将这个标识作为取消函数的key，保存到请求队列中
     const reqKey = `${url}&${method}`

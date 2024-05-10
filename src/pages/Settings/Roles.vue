@@ -15,8 +15,9 @@
       formModelPlaceholderSearchKey:'search menus name',
       formModelPlaceholderDescription:'Please enter a roles description',
 
-      "InfoNotification": "Info Notification",
-      "deleteContent": "Are you sure you want to delete roles {name}?",
+      InfoNotification: "Info Notification",
+      deleteContent: "Are you sure you want to delete roles {name}?",
+      dialogTitle:'{title} Roles',
     },
     zh: {
       pageTitle: "角色管理",
@@ -33,8 +34,9 @@
       formModelPlaceholderSearchKey:'搜索菜单名称',
       formModelPlaceholderDescription:'请输入角色描述',
 
-      "InfoNotification": "信息通知",
-      "deleteContent": "您确定要删除角色{name}吗?",
+      InfoNotification: "信息通知",
+      deleteContent: "您确定要删除角色{name}吗?",
+      dialogTitle:'{title} 角色',
 
     }
   }
@@ -154,10 +156,12 @@ export default defineComponent({
       }
     }
     const formModel = ref(generateFormModel())
-
-    // 新增弹窗
     const visibleDialog = ref(false)
-    function addDialog(_record) {
+    const dialogTitle = ref(t('new'))
+    // 新增弹窗
+
+    function addDialog(_record, title = t('new')) {
+      dialogTitle.value = title
       indeterminate.value = false
       checkedAll.value = false
       formModel.value = generateFormModel()
@@ -167,7 +171,8 @@ export default defineComponent({
     }
 
     // 修改弹窗
-    async function editDialog(_record) {
+    async function editDialog(_record, title = t('edit')) {
+      dialogTitle.value = title
       indeterminate.value = false
       checkedAll.value = false
       formModel.value = generateFormModel()
@@ -237,15 +242,6 @@ export default defineComponent({
           }
         },
       })
-    }
-
-    async function dialogSubmit(done) {
-      const { code } = await roleSave(formModel.value)
-      if (code === 200) {
-        await usePermissionStores.getUseInfo()
-        done(true)
-        getRoleIndex()
-      }
     }
 
     onMounted(() => {
@@ -386,16 +382,28 @@ export default defineComponent({
         {/* 弹窗 */}
         <a-modal
           v-model:visible={visibleDialog.value}
-          title={t('pageTitle')}
-          onBeforeOk={(done) => {
-            formRef.value.validate()
-              .then((res) => {
-                if (res)
-                  done(false)
-                else
-                  dialogSubmit(done)
-              })
-              .catch(_error => done(false))
+          title={t('dialogTitle', { title: dialogTitle.value })}
+          onBeforeOk={async (done) => {
+            try {
+              const isValid = await formRef.value.validate()
+              if (isValid) {
+                done(false)
+                return
+              }
+
+              const { code } = await roleSave(formModel.value)
+              if (code === 200) {
+                await usePermissionStores.getUseInfo()
+                done(true)
+                getRoleIndex()
+              }
+              else {
+                done(false)
+              }
+            }
+            catch (error) {
+              done(false)
+            }
           }}
           unmountOnClose
         >

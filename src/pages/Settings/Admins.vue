@@ -6,9 +6,9 @@
       edit:'Edit',
       delete:'Delete',
       search:'Search',
-      searchNamePlaceholder:'Search Admins Name',
-      searchEmailPlaceholder:'Search Admins Email',
-      searchRolesPlaceholder:'Select Admins Roles',
+      searchNamePlaceholder:'Please enter user name',
+      searchEmailPlaceholder:'Please enter user email',
+      searchRolesPlaceholder:'Please select user roles',
 
       tableOperation:'Operation',
       tableCreated:'Created Time',
@@ -26,7 +26,8 @@
       "InfoNotification": "Info Notification",
       "deleteContent": "Are you sure you want to delete user {email}?",
 
-      required:'{name} is required'
+      required:'{name} is required',
+      dialogTitle:'{title} User',
 
     },
     zh: {
@@ -35,9 +36,9 @@
       edit:'编辑',
       delete:'删除',
       search:'搜索',
-      searchNamePlaceholder:'搜索管理员名称',
-      searchEmailPlaceholder:'搜索管理员邮箱',
-      searchRolesPlaceholder:'选择管理员角色',
+      searchNamePlaceholder:'请输入用户的名称',
+      searchEmailPlaceholder:'请输入用户的邮箱',
+      searchRolesPlaceholder:'请选择用户的角色',
 
       tableOperation:'操作',
       tableCreated:'创建时间',
@@ -47,14 +48,15 @@
       tableLastNameFirstName:'姓名',
       tableId:'编号',
 
-      formModelPlaceholderLastName:'请输入管理员姓氏',
-      formModelPlaceholderFirstName:'请输入管理员名字',
-      formModelPlaceholderEmail:'请输入管理员邮箱',
-      formModelPlaceholderPassword:'请输入管理员密码',
+      formModelPlaceholderLastName:'请输入用户的姓',
+      formModelPlaceholderFirstName:'请输入用户的名',
+      formModelPlaceholderEmail:'请输入用户的邮箱',
+      formModelPlaceholderPassword:'请输入用户的密码',
 
       "InfoNotification": "信息通知",
       "deleteContent": "您确定要删除用户{email}吗?",
-      required:'{name} 是必填项'
+      required:'{name} 是必填项',
+      dialogTitle:'{title}用户',
 
     }
   }
@@ -144,18 +146,15 @@ export default defineComponent({
     const formModel = ref(generateFormModel())
     const visibleDialog = ref(false)
 
-    // 新增弹窗
-    function addDialog(_record) {
+    // 新增弹窗 修改弹窗
+    const dialogTitle = ref(t('new'))
+    function addOrEditDialog(_record, title = t('new')) {
+      dialogTitle.value = title
       formModel.value = generateFormModel()
-      if (_record && _record.id)
-        formModel.value.id = _record.id
-      visibleDialog.value = true
-    }
-    // 修改弹窗
-    function editDialog(_record) {
-      formModel.value = generateFormModel()
-      formModel.value = _record
-      formModel.value.password = ''
+      if (_record && _record.id) {
+        formModel.value = JSON.parse(JSON.stringify(_record))
+        formModel.value.password = ''
+      }
       visibleDialog.value = true
     }
 
@@ -241,7 +240,7 @@ export default defineComponent({
                     v-hasPermi="['/v1/admin/create']"
                     type="primary"
                     onClick={() => {
-                      addDialog()
+                      addOrEditDialog()
                     }}
                   >
                     {{ icon: () => {
@@ -314,7 +313,7 @@ export default defineComponent({
                                         type="text"
                                         shape="circle"
                                         onClick={() => {
-                                          editDialog(JSON.parse(JSON.stringify(record)))
+                                          addOrEditDialog(record, t('edit'))
                                         }}
                                       >
                                         <icon-pen />
@@ -327,7 +326,7 @@ export default defineComponent({
                                         shape="circle"
                                         status="danger"
                                         onClick={() => {
-                                          deleteDialog(JSON.parse(JSON.stringify(record)))
+                                          deleteDialog(record)
                                         }}
                                       >
                                         <icon-delete />
@@ -352,25 +351,30 @@ export default defineComponent({
         {/* 弹窗 */}
         <a-modal
           v-model:visible={visibleDialog.value}
-          title={t('pageTitle')}
-          onBeforeOk={(done) => {
-            formRef.value.validate()
-              .then(async (res) => {
-                if (res) {
-                  done(false)
-                }
-                else {
-                  const { code } = formModel.value.id ? await adminEdit(formModel.value) : await adminCreate(formModel.value)
-                  if (code === 200) {
-                    getTableList()
-                    done(true)
-                  }
-                  else {
-                    done(false)
-                  }
-                }
-              })
-              .catch(_error => done(false))
+          title={t('dialogTitle', { title: dialogTitle.value })}
+          onBeforeOk={async (done) => {
+            try {
+              const isValid = await formRef.value.validate()
+
+              if (isValid) {
+                done(false)
+                return
+              }
+
+              const formValue = formModel.value
+              const { code } = formValue.id ? await adminEdit(formValue) : await adminCreate(formValue)
+
+              if (code === 200) {
+                getTableList()
+                done(true)
+              }
+              else {
+                done(false)
+              }
+            }
+            catch (error) {
+              done(false)
+            }
           }}
           unmountOnClose
         >

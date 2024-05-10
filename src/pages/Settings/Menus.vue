@@ -25,6 +25,7 @@
       formModelIsHidden:'Is it displayed in the navigation bar?',
       "InfoNotification": "Info Notification",
       "deleteContent": "Are you sure you want to delete {name}?",
+      dialogTitle:'{title} {operation}',
     },
     zh: {
       pageTitle: "菜单管理",
@@ -51,6 +52,7 @@
       formModelIsHidden:'是否在导航栏中显示？',
       "InfoNotification": "信息通知",
       "deleteContent": "您确定要删除{name}吗?",
+      dialogTitle:'{title}{operation}',
     }
   }
 </i18n>
@@ -153,19 +155,21 @@ export default defineComponent({
     }
     const formModel = ref(generateFormModel())
     const visibleDialog = ref(false)
-
+    const dialogTitle = ref(t('new'))
     // 新增弹窗
-    function addDialog(_record) {
+    function addDialog(_record, title = t('new')) {
+      dialogTitle.value = title
       formModel.value = generateFormModel()
       if (_record && _record.id)
         formModel.value.parent_id = _record.id
       visibleDialog.value = true
     }
     // 修改弹窗
-    function editDialog(_record) {
+    function editDialog(_record, title = t('edit')) {
+      dialogTitle.value = title
       formModel.value = generateFormModel()
-      formModel.value = _record
-      formModel.value.sort = `${_record.sort}`
+      formModel.value = JSON.parse(JSON.stringify(_record))
+      formModel.value.sort = `${formModel.value.sort}`
       visibleDialog.value = true
     }
     // 删除弹窗
@@ -178,7 +182,7 @@ export default defineComponent({
           return (
             <>
               <div className="w-full flex items-center justify-center text-center">
-                {t('deleteContent', { name: `${menuText.value.find(item => item.value === _record.type).title} ${_record.name}` })}
+                {t('deleteContent', { name: `${t(menuText.value.find(item => item.value === _record.type).title)} ${_record.name}` })}
               </div>
             </>
           )
@@ -331,7 +335,7 @@ export default defineComponent({
                                         type="text"
                                         shape="circle"
                                         onClick={() => {
-                                          editDialog(JSON.parse(JSON.stringify(record)))
+                                          editDialog(record)
                                         }}
                                       >
                                         <icon-pen />
@@ -344,7 +348,7 @@ export default defineComponent({
                                         shape="circle"
                                         status="danger"
                                         onClick={() => {
-                                          deleteDialog(JSON.parse(JSON.stringify(record)))
+                                          deleteDialog(record)
                                         }}
                                       >
                                         <icon-delete />
@@ -369,23 +373,26 @@ export default defineComponent({
         {/* 弹窗 */}
         <a-modal
           v-model:visible={visibleDialog.value}
-          title={t('pageTitle')}
-          onBeforeOk={(done) => {
-            formRef.value.validate()
-              .then(async (res) => {
-                if (res) {
-                  done(false)
-                }
-                else {
-                  formModel.value.hidden = formModel.value.hidden ? 1 : 0
-                  const { code } = await menuSave(formModel.value)
-                  if (code === 200) {
-                    getMenuIndex()
-                    done(true)
-                  }
-                }
-              })
-              .catch(_error => done(false))
+          title={t('dialogTitle', { title: dialogTitle.value, operation: t(menuText.value.find(item => item.value === formModel.value.type).title) })}
+          onBeforeOk={async (done) => {
+            try {
+              const isValid = await formRef.value.validate()
+              if (isValid) {
+                done(false)
+                return
+              }
+
+              formModel.value.hidden = formModel.value.hidden ? 1 : 0
+              const { code } = await menuSave(formModel.value)
+
+              if (code === 200) {
+                getMenuIndex()
+                done(true)
+              }
+            }
+            catch (error) {
+              done(false)
+            }
           }}
           unmountOnClose
         >
