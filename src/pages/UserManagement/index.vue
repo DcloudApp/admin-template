@@ -181,10 +181,11 @@ export default defineComponent({
     const dialogTitle = ref(t('new'))
 
     // 查看弹窗
+    const viewDialogForm = ref(null)
     const showViewDialog = ref(false)
     function viewDialog(_record, title = t('new')) {
       dialogTitle.value = title
-      formModel.value = JSON.parse(JSON.stringify(_record))
+      viewDialogForm.value = JSON.parse(JSON.stringify(_record))
       showViewDialog.value = true
     }
 
@@ -585,22 +586,73 @@ export default defineComponent({
           v-model:visible={showViewDialog.value}
           title={t('dialogTitle', { title: dialogTitle.value })}
           unmountOnClose
+          footer={false}
+          modal-class="modalBodyClass"
         >
-          <a-form
-            ref={formRef}
-            model={formModel.value}
-            layout="vertical"
-          >
-            <a-form-item
-              field="last_name"
-              hide-label
-              validate-trigger="blur"
-              rules={[{ required: true, message: `${t('required', { name: 'Last Name' })}` }]}
-            >
-              {/* <AppUpload /> */}
-            </a-form-item>
+          {/* {JSON.stringify(viewDialogForm.value)} */}
+          <div className="myScrollbar max-h-400px w-full flex flex-col gap-3 overflow-auto p-24px">
+            <div className="w-full flex flex-col gap-1">
+              <div>Avatar:</div>
+              <a-avatar
+                imageUrl={viewDialogForm.value.avatar}
+              >
+              </a-avatar>
+            </div>
+            <div className="w-full flex gap-5">
+              <div className="w-50% flex flex-col gap-1">
+                <div>User Name:</div>
+                <a-tag size="large">{viewDialogForm.value.username}</a-tag>
+              </div>
+              <div className="w-50% flex flex-col gap-1">
+                <div>Gender:</div>
+                <a-tag size="large">{GenderGroup.find(item => item.value === viewDialogForm.value.gender)?.title || 'Other'}</a-tag>
+              </div>
+            </div>
 
-          </a-form>
+            <div className="w-full flex gap-5">
+              <div className="w-50% flex flex-col gap-1">
+                <div>Cellphone:</div>
+                <a-tag size="large">{viewDialogForm.value.cellphone}</a-tag>
+              </div>
+              <div className="w-50% flex flex-col gap-1">
+                <div>Email:</div>
+                <a-tag size="large">{viewDialogForm.value.email}</a-tag>
+              </div>
+
+            </div>
+            <div className="w-full flex gap-5">
+              <div className="w-50% flex flex-col gap-1">
+                <div>User Status:</div>
+                <a-tag size="large">{viewDialogForm.value.status}</a-tag>
+              </div>
+              <div className="w-50% flex flex-col gap-1">
+                <div>Invite Code:</div>
+                <a-tag size="large"></a-tag>
+              </div>
+
+            </div>
+            <div className="w-full flex gap-5">
+              <div className="w-50% flex flex-col gap-1">
+                <div>Vip Synastry:</div>
+                <a-tag size="large"></a-tag>
+              </div>
+              <div className="w-50% flex flex-col gap-1">
+                <div>Estrela:</div>
+                <a-tag size="large"></a-tag>
+              </div>
+
+            </div>
+            <div className="w-full flex gap-5">
+              <div className="w-50% flex flex-col gap-1">
+                <div>Moeda:</div>
+                <a-tag size="large"></a-tag>
+              </div>
+              <div className="w-50% flex flex-col gap-1">
+                <div>Credits:</div>
+                <a-tag size="large"></a-tag>
+              </div>
+            </div>
+          </div>
         </a-modal>
       </>
     )

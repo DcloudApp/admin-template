@@ -141,9 +141,6 @@ export default defineComponent({
   border-radius: 7px;
 }
 
-.arco-menu ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-text-3);
-}
 .arco-menu:hover ::-webkit-scrollbar-thumb {
   background-color: var(--color-text-4);
 }
