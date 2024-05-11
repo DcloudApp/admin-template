@@ -25,6 +25,7 @@
       tableCellphone:'Cellphone',
       tableCreated:'Created Time',
       tableOperation:'Operation',
+      InviteCode:'Invite Code',
 
       "InfoNotification": "Info Notification",
       "deleteContent": "Are you sure you want to delete user {username}?",
@@ -34,6 +35,7 @@
       formModelPlaceholderUserName:'Enter user name',
       formModelPlaceholderCellphoneNumber:'Enter user cellphone',
       formModelPlaceholderEmail:'Enter user email',
+
     },
     zh: {
       pageTitle: "用户管理",
@@ -60,6 +62,7 @@
       tableCellphone:'手机号码',
       tableCreated:'创建时间',
       tableOperation:'操作',
+      InviteCode:'邀请码',
 
       "InfoNotification": "信息通知",
       "deleteContent": "您确定要删除用户{username}吗?",
@@ -69,6 +72,7 @@
       formModelPlaceholderUserName:'输入用户名称',
       formModelPlaceholderCellphoneNumber:'输入用户手机号码',
       formModelPlaceholderEmail:'输入用户邮箱',
+
     }
   }
 </i18n>
@@ -528,7 +532,7 @@ export default defineComponent({
               validate-trigger="blur"
               rules={[{ required: true, message: `${t('required', { name: 'Avatar' })}` }]}
             >
-              <AppUpload v-model:srcList={formModel.value.srcList} v-model:fileList={formModel.value.fileList} />
+              <AppUpload title={t('tableAvatar')} v-model:srcList={formModel.value.srcList} v-model:fileList={formModel.value.fileList} />
             </a-form-item>
             <a-form-item
               field="username"
@@ -592,62 +596,66 @@ export default defineComponent({
           {/* {JSON.stringify(viewDialogForm.value)} */}
           <div className="myScrollbar max-h-400px w-full flex flex-col gap-3 overflow-auto p-24px">
             <div className="w-full flex flex-col gap-1">
-              <div>Avatar:</div>
+              <div>{`${t('tableAvatar')}:`}</div>
               <a-avatar
                 imageUrl={viewDialogForm.value.avatar}
               >
               </a-avatar>
             </div>
-            <div className="w-full flex gap-5">
-              <div className="w-50% flex flex-col gap-1">
-                <div>User Name:</div>
+            <div className="w-full flex flex-col gap-5 md:flex-row">
+              <div className="w-full flex flex-col gap-1 md:w-50%">
+                <div>
+                  {`${t('tableUserName')}:`}
+                </div>
                 <a-tag size="large">{viewDialogForm.value.username}</a-tag>
               </div>
-              <div className="w-50% flex flex-col gap-1">
-                <div>Gender:</div>
+              <div className="w-full flex flex-col gap-1 md:w-50%">
+                <div>
+                  {`${t('tableGender')}:`}
+                </div>
                 <a-tag size="large">{GenderGroup.find(item => item.value === viewDialogForm.value.gender)?.title || 'Other'}</a-tag>
               </div>
             </div>
 
-            <div className="w-full flex gap-5">
-              <div className="w-50% flex flex-col gap-1">
-                <div>Cellphone:</div>
+            <div className="w-full flex flex-col gap-5 md:flex-row">
+              <div className="w-full flex flex-col gap-1 md:w-50%">
+                <div>{`${t('tableCellphone')}:`}</div>
                 <a-tag size="large">{viewDialogForm.value.cellphone}</a-tag>
               </div>
-              <div className="w-50% flex flex-col gap-1">
-                <div>Email:</div>
+              <div className="w-full flex flex-col gap-1 md:w-50%">
+                <div>{`${t('tableEmail')}:`}</div>
                 <a-tag size="large">{viewDialogForm.value.email}</a-tag>
               </div>
 
             </div>
-            <div className="w-full flex gap-5">
-              <div className="w-50% flex flex-col gap-1">
-                <div>User Status:</div>
+            <div className="w-full flex flex-col gap-5 md:flex-row">
+              <div className="w-full flex flex-col gap-1 md:w-50%">
+                <div>{`${t('tableStatus')}:`}</div>
                 <a-tag size="large">{viewDialogForm.value.status}</a-tag>
               </div>
-              <div className="w-50% flex flex-col gap-1">
-                <div>Invite Code:</div>
+              <div className="w-full flex flex-col gap-1 md:w-50%">
+                <div>{`${t('InviteCode')}:`}</div>
                 <a-tag size="large"></a-tag>
               </div>
 
             </div>
-            <div className="w-full flex gap-5">
-              <div className="w-50% flex flex-col gap-1">
+            <div className="w-full flex flex-col gap-5 md:flex-row">
+              <div className="w-full flex flex-col gap-1 md:w-50%">
                 <div>Vip Synastry:</div>
                 <a-tag size="large"></a-tag>
               </div>
-              <div className="w-50% flex flex-col gap-1">
+              <div className="w-full flex flex-col gap-1 md:w-50%">
                 <div>Estrela:</div>
                 <a-tag size="large"></a-tag>
               </div>
 
             </div>
-            <div className="w-full flex gap-5">
-              <div className="w-50% flex flex-col gap-1">
+            <div className="w-full flex flex-col gap-5 md:flex-row">
+              <div className="w-full flex flex-col gap-1 md:w-50%">
                 <div>Moeda:</div>
                 <a-tag size="large"></a-tag>
               </div>
-              <div className="w-50% flex flex-col gap-1">
+              <div className="w-full flex flex-col gap-1 md:w-50%">
                 <div>Credits:</div>
                 <a-tag size="large"></a-tag>
               </div>

@@ -22,6 +22,10 @@ export default defineComponent({
         return []
       },
     },
+    title: {
+      type: String,
+      default: '',
+    },
     fileList: {
       type: Array,
       default: () => {
@@ -119,8 +123,9 @@ export default defineComponent({
                   useFileDialogImage.open()
                 }}
               >
-                <div class="arco-upload-picture-card-text">
+                <div class="arco-upload-picture-card-text flex flex-col items-center justify-center">
                   <icon-plus />
+                  <span class="text-12px">{props.title}</span>
                 </div>
               </div>
             </span>
