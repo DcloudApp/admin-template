@@ -1,12 +1,14 @@
 <i18n lang="json5">
   {
     en: {
+      DataOverview:'Data Overview',
       ContentProduction: "Content Production",
       ContentClick:'Content Click',
       ContentExposure:'Content Exposure',
       ActiveUsers:'Active Users',
     },
     zh: {
+      DataOverview:'数据总览',
       ContentProduction: "内容生产量",
       ContentClick:'内容点击量',
       ContentExposure:'内容曝光量',
@@ -315,7 +317,7 @@ export default defineComponent({
           <a-spin class="w-full" loading={loading.value}>
             <a-card
               class="general-card"
-              title="数据总览"
+              title={t('DataOverview')}
             >
               <div className="grid grid-cols-2 w-full gap-5 md:grid-cols-4">
                 {renderData.value.map((item) => {
