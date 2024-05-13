@@ -6,7 +6,6 @@ import directives from '@/directive/index'
 import { i18n } from '@/locales/index'
 import App from '@/App.vue'
 import router from '@/router'
-import globalComponents from '@/components'
 
 import '@unocss/reset/tailwind.css'
 import '@arco-design/web-vue/dist/arco.css'
@@ -19,7 +18,7 @@ Modal._context = app._context
 Message._context = app._context
 
 app.use(directives)
-app.use(globalComponents)
+
 app.use(ArcoVue)
 app.use(ArcoVueIcon)
 app.use(i18n)
