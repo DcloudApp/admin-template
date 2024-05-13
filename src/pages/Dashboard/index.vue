@@ -16,7 +16,7 @@
 </i18n>
 
 <script lang='jsx'>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import DataChainGrowth from './components/data-chain-growth.vue'
 import useLoading from '@/hooks/loading'
 
