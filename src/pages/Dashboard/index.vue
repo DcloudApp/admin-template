@@ -281,29 +281,30 @@ export default defineComponent({
         },
         series: [
           generateSeries(
-            t('ContentProduction'),
+            t('ActiveUsers'),
             '#722ED1',
             '#F5E8FF',
-            contentProductionData.value,
-          ),
-          generateSeries(
-            t('ContentClick'),
-            '#F77234',
-            '#FFE4BA',
-            contentClickData.value,
+            activeUsersData.value,
           ),
           generateSeries(
             t('ContentExposure'),
-            '#33D1C9',
-            '#E8FFFB',
+            '#3469FF',
+            '#E8F3FF',
             contentExposureData.value,
           ),
           generateSeries(
-            t('ActiveUsers'),
-            '#3469FF',
-            '#E8F3FF',
-            activeUsersData.value,
+            t('ContentClick'),
+            '#33D1C9',
+            '#E8FFFB',
+            contentClickData.value,
           ),
+          generateSeries(
+            t('ContentProduction'),
+            '#F77234',
+            '#FFE4BA',
+            contentProductionData.value,
+          ),
+
         ],
       }
     })
