@@ -18,8 +18,10 @@
     "@unocss/reset": "^0.60.0",
     "@vueuse/core": "^10.9.0",
     "axios": "^1.6.8",
+    "echarts": "^5.4.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.27",
+    "vue-echarts": "^6.2.3",
     "vue-i18n": "^9.13.1",
     "vue-router": "^4.3.2"
   },
