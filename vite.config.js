@@ -11,7 +11,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
 import removeConsole from 'vite-plugin-remove-console'
-import { vitePluginForArco } from '@arco-plugins/vite-vue'
 
 const timesTamp = new Date().getTime()
 // https://vitejs.dev/config/
@@ -21,9 +20,6 @@ export default defineConfig({
     vueJsx(),
     UnoCSS(),
     VueI18nPlugin({ /* options */ }),
-    vitePluginForArco({
-      style: 'css',
-    }),
     Pages({
       dirs: 'src/pages', // 需要生成路由的文件目录
       exclude: ['**/components/*.vue'], // 排除在外的目录，即不将所有 components 目录下的 .vue 文件生成路由

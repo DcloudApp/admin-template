@@ -143,6 +143,7 @@ export default defineComponent({
     const formRef = ref(null)
     const generateFormModel = () => {
       return {
+        id: '',
         parent_id: 0,
         name: '',
         type: 1,
