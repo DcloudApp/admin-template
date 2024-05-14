@@ -352,6 +352,7 @@ export default defineComponent({
                     loading={tableLoading.value}
                     bordered={false}
                     row-key="id"
+                    scroll={{ x: 1400 }}
                     onPageChange={(page) => {
                       searchForm.value.page = page
                       getTableList()
@@ -360,7 +361,6 @@ export default defineComponent({
                       searchForm.value.page_size = pageSize
                       getTableList()
                     }}
-                    scroll={{ x: 1400 }}
                     pagination={{
                       'show-total': true,
                       'show-page-size': width.value > 430,
@@ -368,7 +368,6 @@ export default defineComponent({
                       'total': searchForm.value.count,
                       'current': searchForm.value.page,
                       'pageSize': searchForm.value.page_size,
-
                     }}
                   >
                     {{
