@@ -21,7 +21,7 @@ export default defineComponent({
     const settingsMenu = computed(() => {
       const findMenuItem = (items) => {
         for (const item of items) {
-          if (`/${item.path}` === route.path || item.path === 'index') {
+          if (`/${item.path}` === route.path) {
             return item
           }
           else if (item.children) {

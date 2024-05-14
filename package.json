@@ -28,6 +28,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^2.17.0",
     "@arco-design/web-vue": "^2.55.1",
+    "@arco-plugins/vite-vue": "^1.4.5",
     "@iconify-json/ci": "^1.1.13",
     "@iconify-json/tabler": "^1.1.111",
     "@unocss/eslint-config": "^0.60.0",
