@@ -5,20 +5,20 @@
       required:'{name} is required',
       senderGuid:'sender guid',
       placeholderSenderGuid:'Please enter sender guid',
-      guid:'guid',
-      placeholderGuid:'Please enter guid',
+      guid:'recipient guid',
+      placeholderGuid:'Please enter recipient guid',
       content:'content',
       placeholderContent:'Please enter content'
     },
     zh: {
       SendPrivateMessage:'发送私信',
       required:'{name}是必填项',
-      senderGuid:'发送方的唯一标识符',
-      placeholderSenderGuid:'请输入发送方的唯一标识符',
-      guid:'唯一标识符',
-      placeholderGuid:'请输入唯一标识符',
+      senderGuid:'发送私信的Guid',
+      placeholderSenderGuid:'请输入发送私信的Guid',
+      guid:'接受私信的Guid',
+      placeholderGuid:'请输入接受私信的Guid',
       content:'内容',
-      placeholderContent:'请输入内容'
+      placeholderContent:'请输入私信内容'
 
     }
   }
