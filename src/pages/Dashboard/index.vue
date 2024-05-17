@@ -381,7 +381,6 @@ export default defineComponent({
 
 <route lang="json5">
   {
-    path:'/',
     name: 'dashboard',
     meta: {
       requiresAuth:true,

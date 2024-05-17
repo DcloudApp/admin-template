@@ -8,7 +8,13 @@ const routes = generatedRoutes.map(v => v?.meta?.layout !== false ? setupLayouts
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: [
+    {
+      path: '/',
+      redirect: '/Dashboard',
+    },
+    ...routes,
+  ],
 })
 
 const LOGIN_PAGE_KEY = '/login'
