@@ -44,35 +44,28 @@ function checkPathExists(data, pathToCheck) {
   return false
 }
 router.beforeEach(async (to, from, next) => {
-  if (localStorage.getItem('appVersion') !== import.meta.env.VITE_APP_VERSION) {
-    localStorage.clear() // 清除所有本地存储
-    localStorage.setItem('appVersion', import.meta.env.VITE_APP_VERSION) // 更新版本号
-    next(LOGIN_PAGE_KEY)
-  }
-  else {
-    if (isLogin()) {
-      // 判断是否需要权限
-      if (to.meta.requiresAuth) {
-        const usePermissionStores = usePermissionStore()
-        const { menus, isLogin } = storeToRefs(usePermissionStores)
-        if (!isLogin.value)
-          await usePermissionStores.getUseInfo()
-        // 等待 getUseInfo 完成后再继续执行后续逻辑
-        if (checkPathExists(menus.value, to.path))
-          next()
-        else
-          next(PERMISSIONS)
-      }
-      else {
+  if (isLogin()) {
+    // 判断是否需要权限
+    if (to.meta.requiresAuth) {
+      const usePermissionStores = usePermissionStore()
+      const { menus, isLogin } = storeToRefs(usePermissionStores)
+      if (!isLogin.value)
+        await usePermissionStores.getUseInfo()
+      // 等待 getUseInfo 完成后再继续执行后续逻辑
+      if (checkPathExists(menus.value, to.path))
         next()
-      }
+      else
+        next(PERMISSIONS)
     }
     else {
-      if (to.meta.requiresAuth)
-        next(LOGIN_PAGE_KEY)
-      else
-        next()
+      next()
     }
+  }
+  else {
+    if (to.meta.requiresAuth)
+      next(LOGIN_PAGE_KEY)
+    else
+      next()
   }
 })
 
