@@ -144,7 +144,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-:deep(.arco-upload-list-picture){
+:deep(.arco-upload-list-picture) {
   margin-right: 0;
   margin-bottom: 0;
 }

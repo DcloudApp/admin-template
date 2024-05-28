@@ -285,30 +285,30 @@ export default defineComponent({
 
 <style scoped lang="scss">
   .general-card {
-    min-height: 204px;
-  }
-  .content {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 12px;
-  }
-  .percent-text {
-    margin-left: 16px;
-  }
-  .chart {
-    width: 100%;
-    height: 80px;
-    vertical-align: bottom;
-  }
+  min-height: 204px;
+}
+.content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 12px;
+}
+.percent-text {
+  margin-left: 16px;
+}
+.chart {
+  width: 100%;
+  height: 80px;
+  vertical-align: bottom;
+}
 
-  .unit {
-    padding-left: 8px;
-    font-size: 12px;
-  }
+.unit {
+  padding-left: 8px;
+  font-size: 12px;
+}
 
-  .label {
-    padding-right: 8px;
-    font-size: 12px;
-  }
+.label {
+  padding-right: 8px;
+  font-size: 12px;
+}
 </style>

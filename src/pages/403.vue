@@ -7,7 +7,7 @@
     zh: {
       subtitle: "对不起，您没有访问该资源的权限～",
       BackHome:'返回首页'
-    }
+        }
   }
 </i18n>
 
@@ -48,6 +48,6 @@ export default defineComponent({
     meta: {
       layout: false,
       requiresAuth:false,
-    }
+             }
   }
 </route>

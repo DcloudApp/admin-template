@@ -35,7 +35,6 @@
 
 <script lang='jsx'>
 import { onMounted } from 'vue'
-import { Modal } from '@arco-design/web-vue'
 import { useWindowSize } from '@vueuse/core'
 import VersionsUpdateModal from './components/VersionsUpdateModal.vue'
 import PushNotificationModal from './components/PushNotificationModal.vue'
