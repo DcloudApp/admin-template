@@ -55,20 +55,21 @@ export default defineComponent({
     })
 
     useFileDialogImage.onChange((files) => {
-      if (files.length > 0) {
+      if (files && files.length > 0) {
         for (let index = 0; index < files.length; index++) {
           const item = files[index]
           const url = URL.createObjectURL(item)
 
           if (imageFileList.value.length < props.max) {
-            imageFileList.value = [...imageFileList.value, { name: url, file: item }]
+            imageFileList.value.push({ name: url, file: item })
 
-            srcList.value = [...srcList.value, url]
+            srcList.value.push(url)
           }
         }
       }
     })
     function deleteImgFile(item, index) {
+      useFileDialogImage.reset()
       imageFileList.value = imageFileList.value.filter(items => items.name !== item)
       srcList.value.splice(index, 1)
     }
