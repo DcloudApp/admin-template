@@ -138,6 +138,7 @@ export default defineComponent({
       return {
         id: '',
         last_name: '',
+        first_name: '',
         email: '',
         password: '',
         user_role: '',
