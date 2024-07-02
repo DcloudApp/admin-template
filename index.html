@@ -21,9 +21,13 @@
         const prefersDark =
           window.matchMedia &&
           window.matchMedia('(prefers-color-scheme: dark)').matches
-        const setting = localStorage.getItem('color-schema') || 'auto'
-        if (setting === 'dark' || (prefersDark && setting !== 'light'))
+        const setting = localStorage.getItem('vueuse-color-scheme') || 'auto'
+        if (setting === 'dark' || (prefersDark && setting !== 'light')) {
+          document.body.setAttribute('arco-theme', 'dark')
           document.documentElement.classList.toggle('dark', true)
+        } else {
+          document.body.removeAttribute('arco-theme')
+        }
       })()
     </script>
     <script type="module" src="/src/main.js"></script>
