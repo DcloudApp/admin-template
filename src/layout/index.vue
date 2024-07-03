@@ -19,7 +19,7 @@ export default defineComponent({
               <Menu />
             </div>
           </div>
-          <div className="flex flex-1 flex-col overflow-y-scroll bg-[var(--color-fill-2)]">
+          <div className="myScrollbar flex flex-1 flex-col overflow-y-scroll bg-[var(--color-fill-2)]">
             <div className="sticky left-0 top-0 z-99 w-full backdrop-blur-md md:p-5 md:pb-0">
               <Navbar></Navbar>
             </div>

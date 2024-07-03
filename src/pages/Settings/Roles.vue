@@ -6,7 +6,7 @@
       edit:'Edit',
       delete:'Delete',
       search:'Search',
-      searchName:'Please enter Roles Name',
+      searchName:'Please enter roles name',
       name:'Name',
       description:'Description',
       operation:'Operation',

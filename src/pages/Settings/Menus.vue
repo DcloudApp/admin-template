@@ -6,7 +6,7 @@
       edit:'Edit',
       delete:'Delete',
       search:'Search',
-      searchName:'Please enter Menu Name',
+      searchName:'Please enter menu name',
       type:'Type',
       name:'Name',
       sort:'sort',
