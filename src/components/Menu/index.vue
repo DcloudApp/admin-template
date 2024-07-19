@@ -53,7 +53,6 @@ export default defineComponent({
           style="box-shadow: 0 2px 5px 0 rgba(0,0,0,0.08);"
           default-open-keys={[settingsMenu.value?.parent_id]}
           default-selected-keys={[settingsMenu.value?.id]}
-          show-collapse-button={!drawerVisible.value}
           onCollapse={(type) => {
             collapse.value = type
           }}

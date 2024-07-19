@@ -7,7 +7,7 @@ export default defineComponent({
   setup() {
     return () => (
       <>
-        <div className="h-40px w-full flex flex-shrink-0 items-center justify-center text-[var(--color-text-2)]">{footer.title}</div>
+        <div className="z-1 h-40px w-full flex flex-shrink-0 items-center justify-center text-[var(--color-text-2)]">{footer.title}</div>
       </>
     )
   },

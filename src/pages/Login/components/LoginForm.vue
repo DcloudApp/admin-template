@@ -56,12 +56,12 @@ export default defineComponent({
         <div className="w-330px flex flex-col">
           <div className="flex gap-2">
             <div className={`h-33px w-33px i-svg-logo ${app.logo}`} />
-            <div className="mb-5 text-24px text-[var(--color-neutral-10)] font-500 leading-32px">
+            <div className="mb-5 text-24px text-[var(--color-neutral-10)] font-500 leading-32px mix-blend-difference">
               { app.title }
             </div>
           </div>
 
-          <div className="text-16px text-[var(--color-neutral-8)] leading-24px">
+          <div className="text-16px text-[var(--color-neutral-8)] leading-24px mix-blend-difference">
             {`Welcome to ${app.title}! 👋🏻`}
           </div>
           <div className="mb-5 text-16px text-[var(--color-neutral-8)] leading-24px">
@@ -130,7 +130,7 @@ export default defineComponent({
               >
               </a-input>
               <a-image
-                class="mx-1 cursor-pointer"
+                class="mx-1 cursor-pointer mix-blend-multiply"
                 preview={false}
                 src={VerificationImg.value}
                 onClick={() => {
