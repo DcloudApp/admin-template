@@ -3,7 +3,7 @@ script.src = 'https://unpkg.com/vue@3/dist/vue.global.prod.js';
 script.onload = () => {
     const app = document.createElement('div');
     app.id = 'app';
-    document.body.appendChild(app);
+    document.getElementById('MainContent').appendChild(app);
     const { createApp, h, ref, reactive, onMounted, watch } = Vue;
     createApp({
         setup() {
@@ -272,7 +272,7 @@ script.onload = () => {
                             width: 400px;
                             max-width: 90%;
                             border: 1px solid #e5e6eb;
-                            position: fixed;
+                            position: absolute;
                             padding: 15px;
                             right: 10px;
                             bottom: 10px;
